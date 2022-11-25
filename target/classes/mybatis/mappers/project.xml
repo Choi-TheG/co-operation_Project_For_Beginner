@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.project">
+
+   <resultMap id="projectMap" type="projectVO">
+      <id property="projectSeq" column="project_seq"/>
+      <result property="teamId" column="team_id"/>
+      <result property="projectName" column="project_name"/>
+      <result property="finishYn" column="finish_yn"/>
+      <result property="percentage" column="percentage"/>
+      <result property="createDate" column="create_date"/>
+      <result property="teamLeaderSeq" column="team_leader_seq"/>
+      <result property="teamCategory" column="team_category"/>
+      <result property="startDate" column="start_date"/>
+      <result property="endDate" column="end_date"/>
+   </resultMap>
+
+   <select id="checkProjectName" resultType="int" parameterType="String">
+      <![CDATA[
+        select count(*) 
+          from project
+         where project_name = #{projectName}
+      ]]>
+	</select>
+	
+	<select id="modifyProjectName" parameterType="projectVO">
+      <![CDATA[
+        update project
+       	   set project_name = #{projectName},
+       	       update_time = now()
+       	 where project_seq = #{projectSeq}
+      ]]>
+	</select>
+	
+	<select id="modifyProjectDate" parameterType="projectVO">
+      <![CDATA[
+        update project
+       	   set start_date = #{startDate},
+       	   	   end_date = #{endDate},
+       	       update_time = now()
+       	 where project_seq = #{projectSeq}
+      ]]>
+	</select>
+	
+	<select id="createProject" parameterType="projectVO">
+      <![CDATA[
+        insert into project(project_name,team_id) 
+        values (#{projectName},#{teamId})
+      ]]>
+   </select>
+   
+   
+   <select id="selectProjectList" resultMap="projectMap" resultType="projectVO" parameterType="java.lang.Integer">
+      <![CDATA[
+        select a.*,b.team_category as team_category
+  		  from project a left outer join team_member b on a.team_id = b.team_id and b.team_leader = 'Y'
+ 		 where a.team_id in (select team_id from team_member where user_seq = #{userSeq})
+      ]]>
+	</select>
+	
+	<select id="selectProjectAll" resultMap="projectMap">
+      <![CDATA[
+        select a.*,b.user_seq as team_leader_seq,b.team_category as team_category
+  		  from project a left outer join team_member b on a.team_id = b.team_id and b.team_leader = 'Y'
+      ]]>
+	</select>
+	
+	<select id="selectProjectOne" resultMap="projectMap" resultType="projectVO" parameterType="java.lang.Integer">
+      <![CDATA[
+        select a.project_seq,a.team_id,a.project_name,a.finish_yn,a.percentage,a.create_date,a.start_date,a.end_date,b.user_seq as team_leader_seq,b.team_category as team_category
+ 	      from project a left outer join team_member b on a.team_id = b.team_id and b.team_leader = 'Y'
+         where a.project_seq = #{projectSeq}
+      ]]>
+	</select>
+	
+	<select id="deleteProject" parameterType="java.lang.Integer">
+      <![CDATA[
+        update project 
+           set finish_yn='S' ,
+               update_time = now()
+         where project_seq = #{projectSeq}
+      ]]>
+	</select>
+	
+	<select id="updateProjectNoTeamMember">
+      <![CDATA[
+        update project
+   		   set finish_yn = 'S',
+               update_time = now()
+ 		 where team_id not in(select team_id from team_member);
+      ]]>
+	</select>
+	
+</mapper>

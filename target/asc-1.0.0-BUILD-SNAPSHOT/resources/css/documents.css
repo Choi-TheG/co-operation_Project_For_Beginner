@@ -1,0 +1,88 @@
+@charset "UTF-8";
+	td{
+		border: 1px;
+	}
+	
+	/* 테이블 */
+	table {
+		border: 1px solid;
+		width: 100%;
+	}
+	/* 선택된 문서 */
+	.documentsSelected{
+		width: 20%;
+		color: black;
+		font-size: 26px;
+		text-align: center;
+	}
+	/* 다른 문서페이지 */
+	.documentsTab{
+		width: 16%;
+		text-align: center;
+	}
+	/* 다른 문서페이지 링크 */
+	.documentsLink{
+		text-decoration: none;
+		color: black;
+	}
+	
+	/* 다른 문서페이지 마우스 반응*/
+	.documentsLink:hover{
+		text-decoration: none;
+		color: tomato;
+	}
+	
+	/* 문서 버튼 */
+	.documentsButton{
+		text-decoration: none;
+		color: black;
+		float: right;
+		margin-left: 5px; /* 버튼 사이 거리 조절(왼쪽 기준)*/
+	}
+	
+	/* 문서 버튼 마우스 반응 */
+	.documentsButton:hover{
+		text-decoration: none;
+		color: tomato;
+	}
+	
+	/* 문서 이름 */
+	.documentsName{
+		font-size: 18px;
+		font-style: bold;
+		font-weight: bolder;
+		border: none;
+	}
+	
+	/* 문서 작성 일자 */
+	#createDate{
+		border: none;
+		float: right;
+	}
+	/* input type=text인 내용 부분 
+	input[type=text] .pContent{
+		width: 100%;
+		padding: 12px 20px;
+		margin: 8px 0;
+		box-sizing: border-box;
+	}
+	*/
+	/* 문서 테이블 내 제목부분 */
+	#documentsItem{
+		padding: 6px 16px;
+		box-sizing: border-box;
+		text-align: center;
+		font-size: 16px;
+		font-weight: bolder;/* 글씨체 */
+		border: none;
+	}
+	
+	/* 문서 테이블 내 내용부분 */
+	#documentsContent{
+		width: 100%; /* 너비 */
+		padding: 6px 16px; /* 세로 가로 크기 */
+		margin: 1px 0; /* 빈 공간과의 거리 */
+		box-sizing: border-box; /* 박스 크기: 테두리 기준으로 크기 정하기 */
+		font-size: 14px; /* 글씨 크기 */
+		border: none; /* 선: 없음 */
+	}

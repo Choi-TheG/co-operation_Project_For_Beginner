@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.board">
+
+   <resultMap id="boardMap" type="boardVO">
+      <id property="boardSeq" column="board_seq"/>
+      <result property="userSeq" column="user_seq"/>
+      <result property="projectSeq" column="project_seq"/>
+      <result property="boardCategory" column="board_category"/>
+      <result property="boardTitle" column="board_title"/>
+      <result property="boardContent" column="board_content"/>
+      <result property="completeYn" column="complete_yn"/>
+      <result property="createDate" column="create_date"/>
+	  <result property="id" column="id"/>
+	  <result property="startRowNum" column="startRowNum"/>
+	  <result property="viewRows" column="viewRows"/>
+	  <result property="fileName" column="fileName"/>
+	  <result property="realFileName" column="realFileName"/>
+   </resultMap>
+
+
+   <select id="insertBoard" parameterType="boardVO">
+      <![CDATA[
+        insert into board(user_seq,project_seq,board_category,board_title,board_content,fileName,realFileName,complete_yn) 
+        values (#{userSeq},#{projectSeq},#{boardCategory},#{boardTitle},#{boardContent},#{fileName},#{realFileName},'N')
+      ]]>
+   </select>
+   
+   <select id="selectBoardByProjectSeq" parameterType="String" resultMap="boardMap" resultType="boardVO">
+      <![CDATA[
+       
+        select b.board_seq,b.user_seq,b.project_seq,b.board_category,b.board_title,b.board_content,b.complete_yn,b.create_date, u.id 
+        from board b
+		left join user u
+		on b.user_seq=u.user_seq
+		where b.project_seq=#{projectSeq}
+      ]]>
+   </select>
+   
+   <select id="selectBoardByboardSeq" parameterType="String" resultMap="boardMap" resultType="boardVO">
+      <![CDATA[
+        select * from board
+        where board_seq=#{boardSeq}
+      ]]>
+   </select>
+   
+   <select id="updateBoard" parameterType="boardVO" >
+      <![CDATA[
+        update board
+        set board_content = #{boardContent},
+       	    board_title = #{boardTitle},
+        	complete_yn = #{completeYn},
+        	fileName = #{fileName},
+        	realFileName = #{realFileName},
+            update_time = now()
+        where board_seq = #{boardSeq}
+      ]]>
+   </select>
+   
+   <select id="deleteBoard" parameterType="String" >
+      <![CDATA[
+        delete from board
+        where board_seq = #{boardSeq}
+      ]]>
+   </select>
+   
+   <select id="selectIdByUserSeq" resultMap="boardMap" resultType="boardVO" >
+      <![CDATA[
+        select board.user_seq, user.id as id from user, board
+		where board.user_seq = user.user_seq and board.user_seq=#{userSeq} and user.status='Y'
+      ]]>
+   </select>
+   
+   
+   <select id="selectBoardByProjectSeqForDashboard" parameterType="String" resultMap="boardMap" resultType="boardVO">
+      <![CDATA[
+        select b.board_seq,b.user_seq,b.project_seq,b.board_category,b.board_title,b.board_content,b.complete_yn,b.create_date, u.id 
+        from board b
+		left join user u
+		on b.user_seq=u.user_seq
+		where b.project_seq=#{projectSeq} and b.complete_yn = 'N'
+		order by b.board_seq desc
+		limit 0,10
+      ]]>
+   </select>
+   
+   <!-- 전체 게시글 수 조회 -->
+	<select id="selectTotalBoardNum" resultType="int" >
+      <![CDATA[
+        select count(*) from board
+		where project_seq = #{projectSeq}
+      ]]>
+   </select>
+   <!-- 게시글 조회(페이징) -->
+	<select id="selectBoardListPaging" parameterType="java.lang.Integer" resultMap="boardMap" resultType="boardVO">
+      <![CDATA[
+        select b.board_seq,b.user_seq,b.project_seq,b.board_category,b.board_title,b.board_content,b.complete_yn,b.create_date, u.id 
+		from board b
+		left join user u
+		on b.user_seq=u.user_seq
+		where b.project_seq=#{projectSeq}
+		order by board_seq desc limit #{startRowNum},#{viewRows};
+      ]]>
+   </select>
+   
+   <!-- 게시글 검색 -->
+   <select id="searchBoard" parameterType="boardVO" resultMap="boardMap" resultType="boardVO" >
+      <![CDATA[
+		select b.board_seq,b.user_seq,b.project_seq,b.board_category,b.board_title,b.board_content,b.complete_yn,b.create_date, u.id 
+		from board b
+		left join user u
+		on b.user_seq=u.user_seq
+		where b.project_seq=#{projectSeq} 
+		and b.board_category like concat('%',#{boardCategory},'%')
+		and b.complete_yn like concat('%',#{completeYn},'%')
+		and (b.board_content like concat('%',#{keyword},'%') or b.board_title like concat('%',#{keyword},'%')
+			or u.id like concat('%',#{keyword},'%'))
+		order by board_seq desc limit #{startRowNum},#{viewRows};
+      ]]>
+   </select>   
+   
+   <!-- 게시판 검색글 수 -->
+      <select id="searchBoardCount" parameterType="boardVO" resultType="java.lang.Integer" >
+      <![CDATA[
+		select count(*) 
+		from board b
+		left join user u
+		on b.user_seq=u.user_seq
+		where project_seq=#{projectSeq} 
+		and board_category like concat('%',#{boardCategory},'%')
+		and complete_yn like concat('%',#{completeYn},'%')
+		and (board_content like concat('%',#{keyword},'%') or board_title like concat('%',#{keyword},'%')
+			or u.id like concat('%',#{keyword},'%'))
+		
+      ]]>
+   </select> 
+	<select id="deleteFile" parameterType="String" >
+      <![CDATA[
+         update board
+         set fileName = "",
+            realFileName = ""
+         where board_seq = #{boardSeq}
+      ]]>
+   </select>
+</mapper>

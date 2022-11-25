@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.dashboard">
+	<resultMap id="dashboardMap" type="dashboardVO">
+		<collection property="documentsList" javaType="java.util.ArrayList" resultMap="documentsMap"></collection>
+	</resultMap>
+	<resultMap id="documentsMap" type="documentsVO">
+		<id property="documentsSeq" column="documents_seq"/>
+		<result property="projectSeq" column="project_seq"/>
+		<result property="documentsName" column="documents_name"/>
+	</resultMap>
+
+	<select id="selectAllDocuments" resultMap="dashboardMap">
+		<![CDATA[
+			select documents_seq,project_seq,documents_name from documents;
+		]]>
+	</select>
+</mapper>

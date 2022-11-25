@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.user">
+
+   <resultMap id="userMap" type="userVO">
+      <id property="userSeq" column="user_seq"/>
+      <result property="id" column="id"/>
+      <result property="pwd" column="pwd"/>
+      <result property="name" column="name"/>
+      <result property="email" column="email"/>
+      <result property="phoneNum" column="phone_num"/>
+      <result property="joinDate" column="join_date"/>
+      <result property="status" column="status"/>
+      <result property="gitLink" column="git_link"/>
+      <result property="startRowNum" column="start_row_num"/>
+      <result property="viewRows" column="view_rows"/>
+      <result property="keyword" column="keyword"/>
+   </resultMap>
+
+   <select id="createUser" parameterType="userVO">
+      <![CDATA[
+        insert into user(id,pwd,name,email,phone_num,status,git_link) 
+        values (#{id},#{pwd},#{name},#{email},#{phoneNum},'Y',#{gitLink})
+      ]]>
+   </select>
+   
+   <select id="selectUserIdBySeq" resultType="String">
+      <![CDATA[
+        select id from user
+        where user_seq = #{userSeq} and status='Y'
+      ]]>
+   </select>
+   
+   <select id="checkId" resultType="int" parameterType="String">
+      <![CDATA[
+        select count(*) 
+          from user
+         where id = #{id}
+           and status='Y'
+      ]]>
+	</select>
+	
+	<select id="checkEmail" resultType="int" parameterType="String">
+      <![CDATA[
+        select count(*) 
+          from user
+         where email = #{email}
+           and status='Y'
+      ]]>
+	</select>
+	
+	<select id="checkPhoneNum" resultType="int" parameterType="String">
+      <![CDATA[
+        select count(*) 
+          from user
+         where phone_num = #{phoneNum}
+           and status='Y'
+      ]]>
+	</select>
+   
+   <select id="selectUser" resultMap="userMap" resultType="userVO">
+      <![CDATA[
+        select * from user where status='Y'
+      ]]>
+   </select>
+   
+   <select id="checkUserByIdPwd"  resultMap="userMap" resultType="userVO" parameterType="userVO">
+      <![CDATA[
+        select *
+          from user 
+         where id = #{id} and pwd = #{pwd} and status='Y'
+      ]]>
+   </select>
+   
+   <select id="checkUserByIdPwd2"  resultType="int" parameterType="userVO">
+      <![CDATA[
+        select count(*)
+          from user 
+         where id = #{id} and pwd = #{pwd} and status='Y'
+      ]]>
+   </select>
+   
+   <select id="checkNameEmail"  resultType="int" parameterType="userVO">
+      <![CDATA[
+        select count(*)
+          from user 
+         where name = #{name} and email = #{email} and status='Y'
+      ]]>
+   </select>
+   
+   <select id="updateUser" parameterType="userVO">
+      <![CDATA[
+        update user
+           set pwd = #{pwd},
+               name = #{name},
+               email = #{email},
+               phone_num = #{phoneNum},
+               status = #{status},
+               git_link = #{gitLink},
+               update_time = now()
+         where user_seq = #{userSeq}
+           and status='Y'
+      ]]>
+   </select>
+   
+    <select id="updatePwd" parameterType="userVO">
+      <![CDATA[
+        update user
+        set pwd = #{pwd},update_time = now()
+        where id = #{id} and status='Y'
+      ]]>
+   </select>
+   
+    <select id="findId"   resultType="String" parameterType="userVO">
+      <![CDATA[
+        select id
+        from user 
+        where name = #{name} and email = #{email} and status='Y'
+      ]]>
+   </select>
+   
+   <select id="findPwd"   resultType="String" parameterType="userVO">
+      <![CDATA[
+        select pwd
+        from user 
+        where name = #{name} and email = #{email} and id = #{id} and status='Y'
+      ]]>
+   </select>
+   
+   <select id="checkUser"  resultType="int">
+      <![CDATA[
+        select count(id) from user where id=#{id} and status='Y';
+      ]]>
+   </select>
+   
+  <!-- 검색된 회원 수 -->
+   	<select id="searchUserCount" resultType="int" parameterType="userVO">
+		<![CDATA[
+			select count(*) from user
+			where status like concat ('%', #{status}, '%')
+			and (user_seq like concat('%', #{keyword}, '%')
+				or id like concat('%', #{keyword}, '%') 
+				or name like concat('%', #{keyword}, '%')
+				or email like concat('%', #{keyword}, '%')
+				or join_date like concat('%', #{keyword}, '%'))
+		]]>
+	</select>
+   
+   	<select id="searchUserListPaging" parameterType="userVO" resultMap="userMap" resultType="userVO">
+		<![CDATA[
+			select count(*) from user
+			where status like concat ('%', #{status}, '%')
+			and (user_seq like concat('%', #{keyword}, '%')
+				or id like concat('%', #{keyword}, '%') 
+				or name like concat('%', #{keyword}, '%')
+				or email like concat('%', #{keyword}, '%')
+				or join_date like concat('%', #{keyword}, '%'))
+	   order by user_seq desc
+				limit #{startRowNum}, #{viewRows};
+		]]>
+	</select>
+   
+	<!-- 회원 목록 페이징 -->
+   	<select id="userListPaging" parameterType="userVO" resultMap="userMap" resultType="userVO">
+		<![CDATA[
+			select 
+				user_seq, id, name, email, join_date 
+			from user where status='Y'
+			order by user_seq desc
+				limit #{startRowNum}, #{viewRows};
+		]]>
+	</select>	
+   
+   	<!-- 총 회원 수 -->
+   	<select id="totalUserCount" resultType="int">
+		<![CDATA[
+			select count(*) from user where status='Y'
+		]]>
+	</select>
+	
+	<!-- 회원 검색 -->
+   	<select id="searchUser" resultType="userVO" resultMap="userMap" parameterType="userVO">
+		<![CDATA[
+			select user_seq, id, name, email, join_date ,git_link
+			from user
+			where status like concat ('%', #{status}, '%') 
+			and (user_seq like concat('%', #{keyword}, '%')
+				or id like concat('%', #{keyword}, '%') 
+				or name like concat('%', #{keyword}, '%')
+				or email like concat('%', #{keyword}, '%')
+				or join_date like concat('%', #{keyword}, '%'))
+		]]>
+	</select>
+   
+   <!-- 상태(status) 'N'으로 바꾸기 -->
+   	<select id="updateUserStatus" parameterType="java.lang.Integer">
+		<![CDATA[
+			update user
+				set status = 'N',update_time = now()
+			where user_seq = #{userSeq} and status='Y'
+		]]>
+	</select>
+
+	<!-- 회원 정보 수정 -->
+	<select id="updateUserInfo" parameterType="userVO">
+		<![CDATA[
+			update user
+				set name = #{name},
+				email = #{email},
+				phone_num = #{phoneNum},
+				git_link = #{gitLink},
+				update_time = now()
+			where user_seq = #{userSeq}
+			  and status='Y'
+		]]>
+	</select>
+
+	<!-- 회원 상세정보 페이지 가기 -->
+	<select id="selectUserInfo" resultMap="userMap" resultType="userVO" parameterType="java.lang.Integer">
+		<![CDATA[
+			select * from user
+			where user_seq = #{userSeq} 
+		]]>
+	</select>	
+
+	<!-- 회원(user) 목록 불러오기 -->
+	<select id="selectAllUserList" resultMap="userMap" resultType="userVO">
+		<![CDATA[
+			select 
+				user_seq, id, name, email, join_date 
+			from user
+			order by user_seq desc
+		]]>
+	</select>	
+
+	<!-- 마이페이지 정보 업데이트 -->
+	<select id="updateMyInfo" parameterType="userVO">
+		<![CDATA[
+			update user
+				set name = #{name},
+				pwd = #{pwd},
+				email = #{email},
+				phone_num = #{phoneNum},
+				git_link = #{gitLink},
+				update_time = now()
+			where id = #{id}
+			  and status='Y'
+		]]>
+	</select>
+	
+	<!-- 비밀번호 체크 -->
+	<select id="pwdCheck" parameterType="userVO" resultType="userVO" >
+		<![CDATA[
+			select * from user where id = #{id} and pwd = #{pwd} and status='Y';
+		]]>
+	</select>
+
+	<!-- 마이페이지에 들어갈 정보 -->
+	<select id="viewMyPage" resultMap="userMap" resultType="userVO" parameterType="String">
+		<![CDATA[
+			select 
+				name, id, pwd, email, phone_num ,git_link
+			from user
+			where id = #{id} and status='Y';
+		]]>
+	</select>
+	
+	<!-- select * 
+              from user 
+             where user_seq not in (select user_seq 
+						              from team_member 
+						             where team_id in (select team_id from team_member where user_seq = #{userSeq})) 
+               and id != 'admin'; -->
+    <!-- 유저 초대 리스트 -->
+	<select id="selectInviteUserList" resultMap="userMap" resultType="userVO" parameterType="java.util.Map">
+		<![CDATA[
+             select * 
+              from user 
+             where user_seq not in (select user_seq 
+						              from team_member 
+						             where team_id in (select team_id from project where project_seq = #{projectSeq})) 
+               and id != 'admin'
+               and status ='Y';
+		]]>
+	</select>
+	
+</mapper>

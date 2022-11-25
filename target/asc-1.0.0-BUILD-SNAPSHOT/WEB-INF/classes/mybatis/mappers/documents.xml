@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.documents">
+
+   <resultMap id="documentsMap" type="documentsVO">
+      <id property="documentsSeq" column="documents_seq"/>
+      <result property="projectSeq" column="project_seq"/>
+      <result property="pageNum" column="page_num"/>
+      <result property="documentsName" column="documents_name"/>
+      <result property="documentsItem1" column="documents_item1"/>
+      <result property="documentsItem2" column="documents_item2"/>
+      <result property="documentsItem3" column="documents_item3"/>
+      <result property="documentsItem4" column="documents_item4"/>
+      <result property="documentsItem5" column="documents_item5"/>
+      <result property="documentsContent1" column="documents_content1"/>
+      <result property="documentsContent2" column="documents_content2"/>
+      <result property="documentsContent3" column="documents_content3"/>
+      <result property="documentsContent4" column="documents_content4"/>
+      <result property="documentsContent5" column="documents_content5"/>
+      <result property="createDate" column="create_date"/>
+      <result property="teamLeader" column="team_leader"/>
+   </resultMap>
+   
+   <select id="selectDashboardList" resultMap="documentsMap" parameterType="String">
+   	<![CDATA[
+        select documents_seq,project_seq,page_num,documents_name 
+          from documents
+         where project_seq = #{projectSeq};
+      ]]>
+   </select>
+
+   <select id="selectDocumentsByProjectSeq" resultMap="documentsMap" resultType="documentsVO" parameterType="java.lang.Integer">
+      <![CDATA[
+        select documents_seq,a.project_seq,page_num,documents_item1,documents_item2,documents_item3,documents_item4,documents_item5,
+        documents_content1,documents_content2,documents_content3,documents_content4,documents_content5, c.user_seq as team_leader
+		from documents a left outer join project b on a.project_seq = b.project_seq
+				 left outer join team_member c on b.team_id = c.team_id and c.team_leader = 'Y'
+                 where a.project_seq = #{projectSeq} and a.page_num = 1;
+      ]]>
+   </select>
+   
+   <select id="createPlan" parameterType="java.lang.Integer">
+      <![CDATA[
+        insert into documents(project_seq,page_num,documents_name,documents_item1,documents_item2,documents_item3,documents_item4,documents_item5,documents_content1,documents_content2,documents_content3,documents_content4,documents_content5)
+		values(#{projectSeq},1,'프로젝트 기획안', '이름', '타이틀', '주제', '내용', '구체화방향','프로젝트  이름', '프로젝트 제목', '프로젝트 주제', '프로젝트 내용', '프로젝트 내용을 구현하기 위한 기능');
+      ]]>
+   </select>
+   
+   <select id="selectDocumentsByDocumentsSeq" resultMap="documentsMap" resultType="documentsVO">
+   	<![CDATA[
+   		select * from documents where documents_seq=#{documentsSeq};
+   	]]>
+   </select>
+   
+   <select id="updateDocuments" parameterType="documentsVO">
+      <![CDATA[
+        update documents
+           set documents_name = #{documentsName},
+               documents_item1 = #{documentsItem1},
+               documents_item2 = #{documentsItem2},
+               documents_item3 = #{documentsItem3},
+               documents_item4 = #{documentsItem4},
+               documents_item5 = #{documentsItem5},
+               documents_content1 = #{documentsContent1},
+               documents_content2 = #{documentsContent2},
+               documents_content3 = #{documentsContent3},
+               documents_content4 = #{documentsContent4},
+               documents_content5 = #{documentsContent5},
+               create_date = #{createDate},
+               update_time = now()
+         where documents_seq = #{documentsSeq};
+      ]]>
+   </select>
+   
+   <select id="deleteDocuments" parameterType="documentsVO">
+      <![CDATA[
+        update documents
+           set documents_name = '프로젝트 기획안',
+               documents_item1 = '이름',
+               documents_item2 = '타이틀',
+               documents_item3 = '주제',
+               documents_item4 = '내용',
+               documents_item5 = '구체화 방향',
+               documents_content1 = '프로젝트 이름',
+               documents_content2 = '프로젝트 제목',
+               documents_content3 = '프로젝트 주제',
+               documents_content4 = '프로젝트 내용',
+               documents_content5 = '프로젝트 내용을 구현하기 위한 기능',
+               create_date = #{createDate},
+               update_time = now()
+         where documents_seq = #{documentsSeq};
+      ]]>
+   </select>
+
+</mapper>

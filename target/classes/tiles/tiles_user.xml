@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+   <definition name="baseLayout"  template="/WEB-INF/views/tiles/layout.jsp">
+      <put-attribute name="title" value="" />
+      <put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
+      <put-attribute name="side" value="" />
+      <put-attribute name="body" value="" />
+      <put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp" />
+   </definition>
+   
+   <definition name="/user/viewJoin" extends="baseLayout">
+      <put-attribute name="title" value="메인페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/user/viewJoin.jsp" />
+   </definition>
+	
+	<definition name="/user/viewLogin" extends="baseLayout">
+      <put-attribute name="title" value="로그인페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/user/viewLogin.jsp" />
+   </definition>
+   
+   <definition name="/viewFindInfoId" extends="baseLayout">
+      <put-attribute name="title" value="아이디찾기페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/user/viewFindInfoId.jsp" />
+   </definition>
+   
+   <definition name="/viewFindInfoPwd" extends="baseLayout">
+      <put-attribute name="title" value="비번찾기페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/user/viewFindInfoPwd.jsp" />
+   </definition>
+   
+   <definition name="/successFindId" extends="baseLayout">
+      <put-attribute name="title" value="아이디페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/user/successFindId.jsp" />
+   </definition>
+   
+   <definition name="/updatePwd" extends="baseLayout">
+      <put-attribute name="title" value="비번페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/user/updatePwd.jsp" />
+   </definition>
+   
+   	<definition name="/checkPwdPage" extends="baseLayout">
+		<put-attribute name="title" value="비밀번호 확인" />
+		<put-attribute name="body" value="/WEB-INF/views/myPage/checkPwdPage.jsp" />
+	</definition>
+   
+   <definition name="/successUpdatePwd" extends="baseLayout">
+      <put-attribute name="title" value="비번페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/user/successUpdatePwd.jsp" />
+   </definition>
+   
+   <!-- 마이페이지 보기 -->
+	<definition name="/viewMyPage" extends="baseLayout">
+		<put-attribute name="title" value="개인정보 조회" />
+		<put-attribute name="body" value="/WEB-INF/views/myPage/viewMyPage.jsp" />
+		<!--   <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/> -->
+	</definition>
+	
+	<!-- 마이페이지 수정 버튼 클릭 시 비밀번호 확인 페이지 -->
+   	<definition name="/updateCheck" extends="baseLayout">
+		<put-attribute name="title" value="비밀번호 확인" />
+		<put-attribute name="body" value="/WEB-INF/views/myPage/updateCheck.jsp" />
+		<!--   <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/> -->
+	</definition>
+	
+	<!-- 개인정보 수정 -->
+	<definition name="/updateMyPage" extends="baseLayout">
+		<put-attribute name="title" value="개인정보 수정" />
+		<put-attribute name="body" value="/WEB-INF/views/myPage/updateMyPage.jsp" />
+		<!--   <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/> -->
+	</definition>
+	   
+	<!-- 회원 탈퇴 클릭 시 비밀번호 확인 페이지 -->
+	<definition name="/removeCheck" extends="baseLayout">
+		<put-attribute name="title" value="탈퇴 확인" />
+		<put-attribute name="body" value="/WEB-INF/views/myPage/removeCheck.jsp" />
+		<!--   <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/> -->
+	</definition>
+</tiles-definitions>

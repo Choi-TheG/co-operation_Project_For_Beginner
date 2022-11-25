@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+   <definition name="baseLayout"  template="/WEB-INF/views/tiles/layout.jsp">
+      <put-attribute name="title" value="" />
+      <put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
+      <put-attribute name="side" value="" />
+      <put-attribute name="body" value="" />
+      <put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp" />
+   </definition>
+   
+   <!-- 검색 -->
+	<definition name="/searchUser" extends="baseLayout">
+		<put-attribute name="title" value="회원 관리" />
+		<put-attribute name="body" value="/WEB-INF/views/manager/userListPaging.jsp" />
+		<put-attribute name="side" value="/WEB-INF/views/tiles/managerSide.jsp"/>
+	</definition>
+   
+   <!-- 회원 상세정보 페이지 -->
+   	<definition name="/viewUserProfile" extends="baseLayout">
+		<put-attribute name="title" value="회원 상세정보" />
+		<put-attribute name="body" value="/WEB-INF/views/manager/viewUserProfile.jsp" />
+		<put-attribute name="side" value="/WEB-INF/views/tiles/managerSide.jsp"/>
+	</definition>
+   
+   <!-- 전체 회원 목록 불러오기 -->
+	<definition name="/userListPaging" extends="baseLayout">
+		<put-attribute name="title" value="회원 관리" />
+		<put-attribute name="body" value="/WEB-INF/views/manager/userListPaging.jsp" />
+		<put-attribute name="side" value="/WEB-INF/views/tiles/managerSide.jsp"/>
+	</definition>
+	
+	<!-- 전체 프로젝트 목록 불러오기 -->
+	<definition name="/projectList" extends="baseLayout">
+		<put-attribute name="title" value="관리자 페이지" />
+		<put-attribute name="body" value="/WEB-INF/views/manager/projectList.jsp" />
+		<put-attribute name="side" value="/WEB-INF/views/tiles/managerSide.jsp"/>
+	</definition>
+	
+	<!-- 일반 유저 목록 불러오기 -->
+	<definition name="/userList" extends="baseLayout">
+		<put-attribute name="title" value="관리자 페이지" />
+		<put-attribute name="body" value="/WEB-INF/views/manager/userList.jsp" />
+		<put-attribute name="side" value="/WEB-INF/views/tiles/managerSide.jsp"/>
+	</definition>
+	
+	
+   
+</tiles-definitions>

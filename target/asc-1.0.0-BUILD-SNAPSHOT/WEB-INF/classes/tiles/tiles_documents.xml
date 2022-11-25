@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+   <definition name="baseLayout"  template="/WEB-INF/views/tiles/layout.jsp">
+      <put-attribute name="title" value="" />
+      <put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
+      <put-attribute name="side" value="" />
+      <put-attribute name="body" value="" />
+      <put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp" />
+   </definition>
+   
+   <definition name="/main" extends="baseLayout">
+   	<put-attribute name="title" value="mainPage"/>
+   	<put-attribute name="body" value="/WEB-INF/views/main/main.jsp"/>
+   </definition>
+   
+   <definition name="/documents/readPlan" extends="baseLayout">
+      <put-attribute name="title" value="메인페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/documents/plan.jsp" />
+      <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/> 
+   </definition>
+   
+    <definition name="/documents/viewUpdatePlan" extends="baseLayout">
+      <put-attribute name="title" value="메인페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/documents/viewUpdatePlan.jsp" />
+      <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/>
+   </definition>
+   
+   <definition name="/documents/updatePlan" extends="baseLayout">
+      <put-attribute name="title" value="메인페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/documents/updatePlan.jsp" />
+      <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/> 
+   </definition>
+   
+   <definition name="/documents/deletePlan" extends="baseLayout">
+      <put-attribute name="title" value="메인페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/documents/plan.jsp" />
+   </definition>
+   
+   <definition name="/documents/examplePlan" extends="baseLayout">
+      <put-attribute name="title" value="기획안 예시" />
+      <put-attribute name="body" value="/WEB-INF/views/documents/examplePlan.jsp" />
+      <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/> 
+   </definition>
+	
+</tiles-definitions>

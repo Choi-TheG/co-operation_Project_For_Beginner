@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.test">
+
+	<resultMap id="testMap" type="testVO">
+		<id property="testSeq" column="test_seq"/>
+		<result property="projectSeq" column="project_seq"/>
+		<result property="customer" column="customer"/>
+		<result property="manager" column="manager"/>
+		<result property="scenarioNo" column="scenario_no"/>
+		<result property="scenarioData" column="scenario_data"/>
+		<result property="expected" column="expected"/>
+		<result property="result" column="result"/>
+		<result property="remark" column="remark"/>
+	</resultMap>
+
+	<!-- 단위테스트 목록출력  -->
+	<select id="selectAllTest" parameterType="java.lang.Integer" resultMap="testMap" resultType="testVO">
+		<![CDATA[
+			select * from test
+			where project_seq = #{projectSeq}
+			order by manager,scenario_no;
+		]]>
+	</select>
+	
+	<!-- 단위테스트 유저별 목록출력  -->
+	<select id="selectUserTest" parameterType="java.lang.Integer" resultMap="testMap" resultType="testVO">
+		<![CDATA[
+			select * from test
+			where project_seq = #{projectSeq}
+			order by scenario_no;
+		]]>
+	</select>
+	
+	<!-- 행 추가 -->
+	<select id="insertTest" parameterType="java.lang.Integer">
+		<![CDATA[
+			insert into test(project_seq)
+			value (#{projectSeq});
+		]]>
+	</select>
+	
+	<!-- 제목행 수정 -->
+	<select id="updateHeadTest" parameterType="testVO">
+		<![CDATA[
+			update test
+			set customer = #{customer},
+				manager = #{manager},
+				update_time = now()
+			where test_seq = #{testSeq};
+		]]>
+	</select>
+	
+	<!-- 행 수정 -->
+	<select id="updateTest" parameterType="testVO">
+		<![CDATA[
+			update test
+			set scenario_no = #{scenarioNo},
+				scenario_data = #{scenarioData},
+				expected = #{expected},
+				result = #{result},
+				remark = #{remark},
+				update_time = now()
+			where test_seq = #{testSeq};
+		]]>
+	</select>
+	
+	<!-- 행 삭제 -->
+	<select id="deleteTest" parameterType="java.lang.Integer">
+		<![CDATA[
+			delete from test
+			where test_seq = (#{testSeq});
+		]]>
+	</select>
+	
+	
+	
+</mapper>

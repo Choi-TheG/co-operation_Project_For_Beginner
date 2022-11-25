@@ -1,0 +1,237 @@
+@charset "UTF-8";
+
+/* 중간 좌측 사이드바 */
+#sidebar-left{
+	width:0%;
+}
+
+/* 중간 우측 콘텐츠 */
+#content{
+	width: 98%;
+}
+
+/* 테이블 */
+table{
+	width: 100%;
+	border: 1px solid;
+}
+
+/* 콘텐츠 상단 메뉴 */
+td.headerDiv{
+	text-align: center;
+	border: 100px;
+	width: 30%;
+	color: black;
+	text-decoration:none;
+}
+
+/* 콘텐츠 상단 메뉴 마우스 반응 */
+td.headerDiv:hover{
+	background-color: #082040;
+	color: #0F2859;
+}
+
+/* 링크 밑줄 제거 */
+a {
+	text-decoration:none;
+	color: #000;
+}
+
+/* 링크 마우스 반응 */
+a :hover { 
+	text-decoration: none;
+	color: #8c8c8c;
+}
+
+/* 퀵메뉴 */
+.quickmenu {
+	position:absolute;  /* absolute: 부모 요소 기준으로 배치 */
+	width:120px;      	/* 퀵메뉴 폭 */
+	top:50%;         	/* 화면 내 위치 조절 50%: 가운데 */
+	margin-top:-24%;  	/* 절대값이 커지면 사라짐 */
+	right:5%;        	/* 숫자 클수록 가운데로 */         
+	background:#fff;
+}
+
+/* 크롬에서 element.style 마음대로 움직일 때 고정시키기 */
+/* element.style{ top: 60%; } */
+
+/* class="quickmenu"인 ul */
+.quickmenu ul {
+	position:relative;
+	float:left;
+	width:100%;
+	display:inline-block;
+	*display:inline;   /* inline: 한줄로 쭉 이어서, block: 한 줄 차지 
+	            		inline-block: 창 크기에 맞춰서 유동적으로 */
+	border:1px solid #ddd;
+	padding: 0px;
+	margin: 0px;
+}
+
+/* class="quickmenu"인 li */
+.quickmenu li {
+	float:left;
+	width:100%;
+	border-bottom:1px solid #ddd;
+	text-align:center;
+	display:inline-block;
+	*display:inline;
+}
+
+/* class="quickmenu"인 a */
+.quickmenu a{
+	position:relative;   /* 요소 자신을 기준으로 배치 */
+	float:left;
+	width:100%;
+	height:30px;
+	line-height:30px;
+	text-align:center;
+	color:#999;
+	font-size:9.5pt;
+}
+
+/* quickmenu 마우스 반응 */
+.quickmenu ul li a:hover {
+	background-color:#384D59;	
+	color:#80F2E7;
+	border:1px solid #ddd;
+}
+
+/* quickmenu 최하단 */
+.quickmenu ul li a:last-child {
+	border-bottom:0;
+}
+
+.topmenu:hover {
+	color: #fff;
+}
+
+/* 카드 */
+.card {
+  --bs-card-spacer-y: 1rem;
+  --bs-card-spacer-x: 1rem;
+  --bs-card-title-spacer-y: 0.5rem;
+  --bs-card-border-width: 1px;
+  --bs-card-border-color: var(--bs-border-color-translucent);
+  --bs-card-border-radius: 0.375rem;
+  --bs-card-box-shadow: ;
+  --bs-card-inner-border-radius: calc(0.375rem - 1px);
+  --bs-card-cap-padding-y: 0.5rem;
+  --bs-card-cap-padding-x: 1rem;
+  --bs-card-cap-bg: rgba(0, 0, 0, 0.03);
+  --bs-card-cap-color: ;
+  --bs-card-height: ;
+  --bs-card-color: ;
+  --bs-card-bg: #fff;
+  --bs-card-img-overlay-padding: 1rem;
+  --bs-card-group-margin: 0.75rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: var(--bs-card-height);
+  word-wrap: break-word;
+  background-color: var(--bs-card-bg);
+  background-clip: border-box;
+  border: var(--bs-card-border-width) solid var(--bs-card-border-color);
+  border-radius: var(--bs-card-border-radius);
+}
+
+.card > hr {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.card > .list-group {
+  border-top: inherit;
+  border-bottom: inherit;
+}
+
+.card > .card-header + .list-group,
+.card > .list-group + .card-footer {
+  border-top: 0;
+}
+
+/* 카드 내부 양식 */
+.card-body {
+  flex: 1 1 auto;
+  height: auto;
+  padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
+  color: var(--bs-card-color);
+}
+
+/* 카드 내 프로젝트 이름 */
+.projectNameDiv{
+	color: #a0a0a0;
+	font-size: 8px;
+	margin-top: 6px;
+}
+
+/* 프로젝트명 */
+.card-title {
+  margin-bottom: 10px;
+  font-size: 24px;
+  margin-top: 6px;
+}
+
+/* 완료 여부 */
+.card-subtitle {
+  margin-top: calc(-0.5 * var(--bs-card-title-spacer-y));
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: #c8c8c8;
+}
+.enterProjectButton{
+	width: 100%;
+	height: 30px;
+	text-align: left;
+	border: 0px;
+	background-color: #fff;
+	margin-top: 6px;
+	font-size: 14px;
+}
+.card-link{
+	
+}
+/* 마지막줄 */
+.card-text:last-child {
+  margin-bottom: 0;
+}
+
+/* 마우스 반응 */
+.card-link:hover{
+	text-decoration: none;
+	color: #a0a0a0;
+}
+
+/* 진행률 */
+.progress {
+  --bs-progress-height: 1rem;
+  --bs-progress-font-size: 0.75rem;
+  --bs-progress-bg: #e9ecef;
+  --bs-progress-border-radius: 0.375rem;
+  --bs-progress-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+  --bs-progress-bar-color: #fff;
+  --bs-progress-bar-bg: #0d6efd;
+  --bs-progress-bar-transition: width 0.6s ease;
+  display: flex;
+  height: 20px;
+  overflow: hidden;
+  font-size: var(--bs-progress-font-size);
+  background-color: var(--bs-progress-bg);
+  border-radius: var(--bs-progress-border-radius);
+}
+
+/* 진행률 진척도 */
+.progress-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  color: var(--bs-progress-bar-color);
+  text-align: center;
+  white-space: nowrap;
+  background-color: #0F2859;
+  transition: var(--bs-progress-bar-transition);
+}
