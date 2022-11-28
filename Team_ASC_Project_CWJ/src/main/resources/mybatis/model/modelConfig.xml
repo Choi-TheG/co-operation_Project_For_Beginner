@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration 	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.project.asc.vo.DashboardVO" alias="dashboardVO"/>
+		<typeAlias type="com.project.asc.vo.DocumentsVO" alias="documentsVO"/>
+		<typeAlias type="com.project.asc.vo.UserVO" alias="userVO"/>
+		<typeAlias type="com.project.asc.vo.ProjectVO"  alias="projectVO" />
+		<typeAlias type="com.project.asc.vo.TeamMemberVO"  alias="teamMemberVO" />
+		<typeAlias type="com.project.asc.vo.ScheduleVO" alias="scheduleVO"/>
+		<typeAlias type="com.project.asc.vo.BoardVO" alias="boardVO"/>
+		<typeAlias type="com.project.asc.vo.PageVO"  alias="pageVO" />
+		<typeAlias type="com.project.asc.vo.ProcessVO"  alias="processVO" />
+		<typeAlias type="com.project.asc.vo.TestVO"  alias="testVO" />
+		<typeAlias type="com.project.asc.vo.MessageVO"  alias="messageVO" />
+		<typeAlias type="com.project.asc.vo.ReplyVO"  alias="replyVO" />
+	</typeAliases>
+</configuration>

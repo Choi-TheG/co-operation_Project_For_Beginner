@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.process">
+
+	<resultMap id="processMap" type="processVO">
+		<id property="processSeq" column="process_seq"/>
+		<result property="projectSeq" column="project_seq"/>
+		<result property="projectFinish" column="project_finish"/>
+		<result property="documentFinish" column="document_finish"/>
+		<result property="functionFinish" column="function_finish"/>
+		<result property="wbsFinish" column="wbs_finish"/>
+		<result property="implementationFinish" column="implementation_finish"/>
+		<result property="testFinish" column="test_finish"/>
+		<result property="complete" column="complete"/>
+	</resultMap>
+
+	<!-- 프로젝트 프로세스 완료  -->
+	<select id="projectComplete" parameterType="java.lang.Integer">
+		<![CDATA[
+			update process
+			set project_finish = 'Y'
+			where project_seq = #{projectSeq}			       	
+		]]>
+	</select>
+	
+</mapper>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+   <definition name="baseLayout"  template="/WEB-INF/views/tiles/layout.jsp">
+      <put-attribute name="title" value="" />
+      <put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
+      <put-attribute name="side" value="" />
+      <put-attribute name="body" value="" />
+      <put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp" />
+   </definition>
+   
+   <!-- 프로젝트 관리 -->
+   <definition name="/project/manageProject" extends="baseLayout">
+      <put-attribute name="title" value="프로젝트 관리" />
+      <put-attribute name="body" value="/WEB-INF/views/process/project/manageProject.jsp" />
+      <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/>
+   </definition>
+   
+   <!-- 팀원 초대 -->
+   <definition name="/project/viewInviteProject" extends="baseLayout">
+      <put-attribute name="title" value="팀원 초대" />
+      <put-attribute name="body" value="/WEB-INF/views/process/project/viewInviteProject.jsp" />
+      <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/>
+   </definition>
+   
+   <!-- 문서 관리 : 메인 -->
+   <definition name="/documents/manageDocuments" extends="baseLayout">
+      <put-attribute name="title" value="문서 관리" />
+      <put-attribute name="body" value="/WEB-INF/views/process/documents/manageDocuments.jsp" />
+      <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/>
+   </definition>
+   
+   <!-- 문서관리 : 수정페이지 이동 -->
+   <definition name="/documents/viewUpdateDocument" extends="baseLayout">
+      <put-attribute name="title" value="문서 수정" />
+      <put-attribute name="header" value="" />
+      <put-attribute name="body" value="/WEB-INF/views/process/documents/viewUpdateDocument.jsp" />
+      <put-attribute name="side" value=""/> 
+      <put-attribute name="footer" value="" />
+   </definition>
+   
+   <!-- 기능 정의 -->
+   <definition name="/function/manageFunction" extends="baseLayout">
+      <put-attribute name="title" value="기능 정의" />
+      <put-attribute name="body" value="/WEB-INF/views/process/function/manageFunction.jsp" />
+      <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/>
+   </definition>
+   
+   <!-- 일정(WBS) -->
+   <definition name="/wbs/manageWbs" extends="baseLayout">
+      <put-attribute name="title" value="일정" />
+      <put-attribute name="body" value="/WEB-INF/views/process/wbs/manageWbs.jsp" />
+      <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/>
+   </definition>
+   
+   <!-- 구현 -->
+   <definition name="/implementation/viewImplementation" extends="baseLayout">
+      <put-attribute name="title" value="구현" />
+      <put-attribute name="body" value="/WEB-INF/views/process/implementation/viewImplementation.jsp" />
+      <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/>
+   </definition>
+   
+   <!-- 테스트 -->
+   <definition name="/test/manageTest" extends="baseLayout">
+      <put-attribute name="title" value="테스트" />
+      <put-attribute name="body" value="/WEB-INF/views/process/test/manageTest.jsp" />
+      <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/>
+   </definition>
+   
+   <!-- 완성 -->
+   <definition name="/project/viewComplete" extends="baseLayout">
+      <put-attribute name="title" value="테스트" />
+      <put-attribute name="body" value="/WEB-INF/views/process/complete/viewComplete.jsp" />
+      <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/>
+   </definition>
+   
+</tiles-definitions>

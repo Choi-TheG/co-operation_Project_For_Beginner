@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.schedule">
+
+   <resultMap id="scheduleMap" type="scheduleVO">
+      <id property="scheduleSeq" column="schedule_seq"/>
+      <result property="projectSeq" column="project_seq"/>
+      <result property="scheduleCategory" column="schedule_category"/>
+      <result property="startDate" column="start_date"/>
+      <result property="endDate" column="end_date"/>
+      <result property="content" column="content"/>
+      <result property="finishYn" column="finish_yn"/>
+   </resultMap>
+
+	<select id="createSchedule" parameterType="scheduleVO">
+      <![CDATA[
+        insert into schedule(project_seq,schedule_category,start_date,end_date,content,finish_yn) 
+        values (#{projectSeq},#{scheduleCategory},#{startDate},#{endDate},#{content},#{finishYn})
+      ]]>
+   </select>
+   
+   <select id="selectSchedule" resultMap="scheduleMap" parameterType="java.lang.Integer">
+      <![CDATA[
+        select schedule_seq,
+        	   project_seq,
+        	   schedule_category,
+        	   concat(left(start_date,4),'-',mid(start_date,5,2),'-',right(start_date,2)) as start_date,
+        	   concat(left(end_date,4),'-',mid(end_date,5,2),'-',right(end_date,2)) as end_date,
+        	   end_date as end_date,
+        	   content,
+        	   finish_yn
+          from schedule
+         where project_seq = #{projectSeq}
+      order by schedule_category
+      ]]>
+   </select>
+</mapper>

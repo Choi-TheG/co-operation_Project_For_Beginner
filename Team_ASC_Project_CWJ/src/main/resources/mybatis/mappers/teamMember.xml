@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.teamMember">
+
+   <resultMap id="teamMemberMap" type="teamMemberVO">
+      <id property="teamMemberSeq" column="team_member_seq"/>
+      <result property="userSeq" column="user_seq"/>
+      <result property="userName" column="user_name"/>
+      <result property="teamId" column="team_id"/>
+      <result property="teamLeader" column="team_leader"/>
+      <result property="createDate" column="create_date"/>
+      <result property="teamCategory" column="team_category"/>
+   </resultMap>
+
+   <select id="selectMaxTeamId" resultType="teamMemberVO">
+      <![CDATA[
+        select max(team_id) as teamId 
+          from team_member
+         where left(team_id,6) = substring(DATE_FORMAT(now(), '%Y%m%d'),3,6)
+      ]]>
+	</select>
+	
+	<select id="createTeamMember" parameterType="teamMemberVO">
+      <![CDATA[
+        insert into team_member(user_seq,team_id,team_leader,team_category) 
+        values (#{userSeq},#{teamId},'Y','S')
+      ]]>
+   </select>
+   
+   <select id="selectTeamMemberList" resultMap="teamMemberMap" resultType="teamMemberVO" parameterType="String">
+      <![CDATA[
+        select a.team_member_seq,a.user_seq,b.name as user_name,a.team_id,a.team_leader,a.create_date as create_date
+  		  from team_member a left outer join user b on a.user_seq = b.user_seq
+         where a.team_id  = #{teamId} 
+           and b.status = 'Y'
+      ]]>
+	</select>
+	
+	<select id="deleteTeamMember" parameterType="java.util.Map">
+      <![CDATA[
+        delete from team_member where user_seq = #{userSeq} and team_id = #{teamId}
+      ]]>
+	</select>
+	
+	<select id="deleteTeamMemberSelf" parameterType="java.lang.Integer">
+      <![CDATA[
+        delete from team_member where user_seq = #{userSeq}
+      ]]>
+	</select>
+	
+	<select id="deleteTeam" parameterType="String">
+      <![CDATA[
+        delete from team_member where team_id = #{teamId}
+      ]]>
+	</select>
+	
+	<select id="countTeamMember" resultType="int" parameterType="String">
+      <![CDATA[
+        select count(*) 
+          from team_member
+         where team_id = #{teamId}
+      ]]>
+	</select>
+	
+	<select id="updateaTeamCategorySole" parameterType="String">
+      <![CDATA[
+        update team_member
+           set team_category = 'S',
+               update_time = now()
+         where team_id = #{teamId}
+      ]]>
+	</select>
+	
+	<select id="updateaTeamCategoryTeam" parameterType="String">
+      <![CDATA[
+        update team_member
+           set team_category ='T',
+               update_time = now()
+         where team_id = #{teamId}
+      ]]>
+	</select>
+	
+	<!-- 유저 초대 -->
+	<select id="insertInviteUser"  parameterType="java.util.Map">
+		<![CDATA[
+			insert into team_member(user_seq,team_id,team_leader,team_category) values(#{userSeq},#{teamId},'N','T');
+		]]>
+	</select>
+	
+	<select id="selectTeamMemberNoLeader" resultType="teamMemberVO" resultMap="teamMemberMap">
+      <![CDATA[
+        select min(user_seq) as user_seq, team_id 
+ 		  from team_member 
+  		 where team_id not in (select team_id from team_member where team_leader ='Y' group by team_id)
+	  group by team_id;
+      ]]>
+	</select>
+	
+	<select id="updateTeamMemberLeader" parameterType="teamMemberVO">
+      <![CDATA[
+        update team_member
+           set team_leader = 'Y',
+               update_time = now()
+         where team_id = #{teamId}
+           and user_seq = #{userSeq}
+      ]]>
+	</select>
+</mapper>

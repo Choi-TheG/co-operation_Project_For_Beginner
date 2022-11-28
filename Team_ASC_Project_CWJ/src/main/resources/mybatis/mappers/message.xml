@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.message">
+
+   <resultMap id="messageMap" type="messageVO">
+      <id property="messageSeq" column="message_seq"/>
+      <result property="fromUserSeq" column="from_user_seq"/>
+      <result property="fromUserName" column="from_user_name"/>
+      <result property="toUserSeq" column="to_user_seq"/>
+      <result property="toUserName" column="to_user_name"/>
+      <result property="title" column="title"/>
+      <result property="content" column="content"/>
+      <result property="messageType" column="message_type"/>
+      <result property="readCount" column="read_count"/>
+      <result property="teamId" column="team_id"/>
+      <result property="sendTime" column="send_time"/>
+
+   </resultMap>
+
+	<select id="createMessage" parameterType="messageVO">
+      <![CDATA[
+        insert into message(from_user_seq,to_user_seq,title,content,message_type,team_id) 
+        values (#{fromUserSeq},#{toUserSeq},#{title},#{content},#{messageType},#{teamId})
+      ]]>
+   </select>
+   
+   <select id="selectMessageList" resultMap="messageMap" resultType="messageVO" parameterType="java.lang.Integer">
+      <![CDATA[
+        select a.*,b.name as from_user_name,c.name as to_user_name
+          from message a left outer join user b on a.from_user_seq = b.user_seq
+          				 left outer join user c on a.to_user_seq = c.user_seq
+         where a.to_user_seq = #{toUserSeq}
+      ]]>
+   </select>
+   
+   <select id="selectMessageOne" resultMap="messageMap" resultType="messageVO" parameterType="java.lang.Integer">
+      <![CDATA[
+        select a.*,b.name as from_user_name,c.name as to_user_name
+          from message a left outer join user b on a.from_user_seq = b.user_seq
+          				 left outer join user c on a.to_user_seq = c.user_seq
+         where a.message_seq = #{messageSeq}
+      ]]>
+   </select>
+   
+   <select id="updateMessageReadCount" parameterType="java.lang.Integer">
+      <![CDATA[
+        update message
+           set read_count = read_count + 1
+         where message_seq = #{messageSeq}
+      ]]>
+   </select>
+   
+   
+   <select id="createInviteConfirmMessage" parameterType="messageVO">
+      <![CDATA[
+        insert into message(from_user_seq,to_user_seq,title,content,message_type) 
+        values (#{fromUserSeq},#{toUserSeq},#{title},#{content},#{messageType})
+      ]]>
+   </select>
+   
+   <select id="updateMessageTypeConfirm" parameterType="java.lang.Integer">
+      <![CDATA[
+        update message
+           set message_type= 'inviteProjectConfrim',
+           	   update_time = now()
+         where message_seq = #{messageSeq}
+      ]]>
+   </select>
+   
+   <select id="createInviteRejectMessage" parameterType="messageVO">
+      <![CDATA[
+        insert into message(from_user_seq,to_user_seq,title,content,message_type) 
+        values (#{fromUserSeq},#{toUserSeq},#{title},#{content},#{messageType})
+      ]]>
+   </select>
+   
+   <select id="updateMessageTypeReject" parameterType="java.lang.Integer">
+      <![CDATA[
+        update message
+           set message_type= 'inviteProjectReject',
+           	   update_time = now()
+         where message_seq = #{messageSeq}
+      ]]>
+   </select>
+   
+   <select id="inviteAlreadyYn" resultType="java.lang.Integer" parameterType="java.util.Map">
+      <![CDATA[
+        select count(*)
+          from message
+         where to_user_seq = #{toUserSeq} 
+           and from_user_seq = #{fromUserSeq}
+           and message_type = 'inviteProject'
+      ]]>
+   </select>
+   
+   <select id="unReadingMessageYn" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+      <![CDATA[
+        select count(*)
+          from message
+         where to_user_seq = #{toUserSeq} 
+           and read_count = 0
+      ]]>
+   </select>
+   
+</mapper>
