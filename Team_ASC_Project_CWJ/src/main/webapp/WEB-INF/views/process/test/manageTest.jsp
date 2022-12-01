@@ -86,16 +86,28 @@ textarea{
 	
 }
 
-table, td, th{
+select{
+	float: right;
+}
+
+/* DivTable */
+.divTable{ display: table;width: 96%; }
+.divTableRow { display: table-row; }
+.divTableHeading { display: table-header-group;}
+.divTableCell, .divTableHead { display: table-cell;height:36px;}
+.divTableHeading { display: table-header-group;}
+.divTableFoot { display: table-footer-group;}
+.divTableBody { display: table-row-group;}
+
+.divTable, .divTableCell, .divTableHead{
 	border: 1px solid #c5c5c5;
 }
 
-th{
-	width:20%;
-	text-align:right
+.divTableHead{
+	font-size: 20px;
 }
 
-tr:hover{
+.divTableRow:hover{
 	
 }
 
@@ -116,6 +128,7 @@ tr:hover{
 .hidden{
 	display: none;
 }
+
 
 #createBtn{
 	width: 96%;
@@ -149,164 +162,262 @@ tr:hover{
 	</ul>
 </nav>
 <div style="font-size:1em;"><h1>단위 테스트</h1></div>
-<table id="testTable" style="width:96%;">
-	<c:forEach var="test" items="${list}" begin="0" end="0">
-		<!-- hidden 수정버튼 누르기 전 -->
-		<tr id="textHead${test.testSeq}">
-			<td style="width:5%"></td>
-			<th>
-				<div style="float:left">
-					<input type="button" onclick="viewUpdateHeadBtn(${test.testSeq})" value="수정">
+<div class="divTable unstyledTable">
+	<!-- 머리 -->
+	<div class="divTableHeading">
+		<!-- 수정버튼 누르기 전 -->
+		<c:forEach var="test" items="${list}" begin="0" end="0">
+			<div id="textHead${test.testSeq}" class="head divTableRow">
+				<div class="divTableHead" style="width:5%;">
+					<input type="hidden" id="only">
 				</div>
-				사용자
-			</th>
-			<th>
-				${test.customer}
-			</th>
-			<th>
-				담당자
-			</th>
-			<th>
-				<!-- projectSeq 통해서 멤버 리스트 받고 셀렉트 박스 선택 시 해당 프로젝트의 멤버 셀 출력 -->
-				<!-- 이름 내림차순으로 정렬 후 testSeq 오름차순으로 정렬 -->
-				<select name="manager" id="">
-					<option selected disabled></option>
-					<c:forEach var="list" items="${userList}">
-						<option value="">${list.userName}</option>
-					</c:forEach>
-				</select>
-				${test.manager}
-			</th>
-		</tr>
-		<!-- hidden 수정버튼 누르고난 후 -->
-		<tr id="updateHead${test.testSeq}" class='hidden'>
-			<td style="width:5%">
-				
-			</td>
-			<th>
-				<div style="float:left">
-					<input type="button" onclick="updateHeadBtn(${test.testSeq})" value="수정">
+				<div class="divTableHead" style="font-weight: bold;text-align: right;">
+					사용자
+				</div>
+				<div class="divTableHead" style="text-align: right">
+					${test.customer}
+				</div>
+				<div class="divTableHead" style="font-weight: bold;text-align: right;">
+					담당자
+				</div>
+				<div class="divTableHead">
+					<input type="button" onclick="viewUpdateHeadBtn(${test.testSeq})" class="hidden" id="updtBtn" value="수정">
+					<select id="selectUser" onchange="selectList(this.form)" name="selectedUser">
+						<option value="0">전체</option>
+						<c:forEach var="userList" items="${userList}" varStatus="optionCount">
+							<option value="${optionCount.count}">${userList.userName}</option>
+						</c:forEach>
+					</select>
+					<input type="hidden" id="loginUser" value="${loginUser}">
+				</div>
+			</div>
+			<!-- 수정버튼 누른 후 -->
+			<div id="updateHead${test.testSeq}" class="divTableRow hidden">
+				<div class="divTableHead" style="width:5%;">
+					
+				</div>
+				<div class="divTableHead" style="font-weight: bold;text-align: right;">
+					사용자
+				</div>
+				<div class="divTableHead" style="text-align: right">
+					<input type="text" value="${test.customer}" name="customer" id="customer">
+				</div>
+				<div class="divTableHead" style="font-weight: bold;text-align: right;">
+					담당자
+				</div>
+				<div class="divTableHead" style="float:right;margin-bottom:0px">
 					<input type="button" onclick="historyBack()" value="뒤로가기">
+					<input type="button" onclick="updateHeadBtn(${test.testSeq})" value="수정">
+					${loginUser}
+					<input type="hidden" value="${loginUser}" name="maneger">
 				</div>
-				사용자
-			</th>
-			<th>
-				<input type="text" value="${test.customer}" name="customer" id="customer${test.testSeq}">
-			</th>
-			<th>
-				담당자
-			</th>
-			<th>
-				
-				<input type="text" value="${test.manager}" name="manager" id="manager${test.testSeq}">
-			</th>
-		</tr>
-	</c:forEach>
-	<tr style="text-align:center;font-weight:bold;"><td>No</td><td>테스트시나리오 / 테스트데이터</td><td>예상 결과</td><td>실제 결과</td><td>비고</td></tr>
-	
-	<c:forEach var="test" items="${list}" varStatus="index">
-		<tbody id="tbody">
-		<!-- hidden 수정버튼 누르기 전 -->
-		<tr id="text${test.testSeq}" class="textHover">
-			<td style="text-align:center" class="btnCell hidden">
-				<input type="button" onclick="viewUpdateBtn(${test.testSeq})" value="수정" class="upBtn updelBtn">
-				<input type="button" onclick="deleteBtn(${test.testSeq})" value="삭제" class="delBtn updelBtn">
-			</td>
-			<td style="text-align:center" class="textCell">
-				${test.scenarioNo}
-				<input type="button" onclick="viewUpdateBtn(${test.testSeq})" value="수정" class="upBtn updelBtn">
-				<input type="button" onclick="deleteBtn(${test.testSeq})" value="삭제" class="delBtn updelBtn">
-			</td>
-			<td>
-				${test.scenarioData}
-			</td>
-			<td>
-				${test.expected}
-			</td>
-			<td>
-				${test.result}
-			</td>
-			<td>
-				${test.remark}
-			</td>
-		</tr>
-		</tbody>
-		<!-- hidden 수정버튼 누르고난 후 -->
-		<tr id="update${test.testSeq}" class=" hidden">
-			<td>
-				<input type="text" value="${test.scenarioNo}" name="scenarioNo" id="scenarioNo${test.testSeq}">
-				<input type="button" onclick="updateBtn(${test.testSeq})" value="수정" class="updelBtn">
-				<input type="button" onclick="historyBack()" value="뒤로가기" class="updelBtn">
-			</td>
-			<td>
-				<!-- textarea 줄 바꿈 시 수정할 때 빈값 같이 들어감으로 인해 한줄로 처리 -->
-				<textarea rows="10" cols="28" name="scenarioData" id="scenarioData${test.testSeq}">${test.scenarioData}</textarea>
-			</td>
-			<td>
-				<textarea rows="10" cols="28" name="expected" id="expected${test.testSeq}">${test.expected}</textarea>
-			</td>
-			<td>
-				<textarea rows="10" cols="28"name="result" id="result${test.testSeq}">${test.result}</textarea>
-			</td>
-			<td>
-				<textarea rows="10" cols="28" name="remark" id="remark${test.testSeq}">${test.remark}</textarea>
-			</td>
-		</tr>
-	</c:forEach>
-	
-</table>
-<input type="button" onclick="location.href='createTest.do'" value="+ 추가" id="createBtn">
+			</div>
+
+		</c:forEach>
+	</div>
+	<!-- 몸통 -->
+	<div class="divTableBody">
+		<div class="divTableRow">
+			<div class="divTableCell" style="font-weight: bold;text-align: center;">No</div>
+			<div class="divTableCell" style="font-weight: bold;text-align: center;width:20%">테스트 시나리오 / 테스트 데이터</div>
+			<div class="divTableCell" style="font-weight: bold;text-align: center;width:20%">예상 결과</div>
+			<div class="divTableCell" style="font-weight: bold;text-align: center;width:20%">실제 결과</div>
+			<div class="divTableCell" style="font-weight: bold;text-align: center;width:20%">비고</div>
+		</div>
+		<!-- 수정버튼 누르기 전 -->
+		<c:forEach var="test" items="${list}" varStatus="rowCount">
+			<div id="text${test.testSeq}" class="divTableRow textHover ${test.manager}">
+				<input type="hidden" value="${test.manager}" id="manager${rowCount.count}">
+				<div class="divTableCell">
+					${test.scenarioNo}
+				</div>
+				<div class="divTableCell">
+					${test.scenarioData}
+				</div>
+				<div class="divTableCell">
+					${test.expected}
+				</div>
+				<div class="divTableCell">
+					${test.result}
+				</div>
+				<div class="divTableCell">
+					${test.remark}
+					<div class="btnDiv hidden" style="float:right;margin-bottom:0px;"><!-- 오른쪽 아래 마우스반응-->
+						<input type="button" onclick="viewUpdateBtn(${test.testSeq},${rowCount.count})" value="수정" class="upBtn updelBtn">
+						<input type="button" onclick="deleteBtn(${test.testSeq})" value="삭제" class="delBtn updelBtn">
+					</div>
+				</div>
+			</div>
+			<!-- 수정버튼 누른 후 -->
+			<div id="update${test.testSeq}" class="divTableRow hidden">
+				<div class="divTableCell">
+					<input type="text" value="${test.scenarioNo}" onKeyUp="this.value=this.value.replace(/[^-0-9]/g,'');" style="border: 1px solid;radius: 5px;margin-top: 0px" name="scenarioNo" id="scenarioNo${test.testSeq}">
+				</div>
+				<div class="divTableCell">
+					<textarea rows="10" cols="20" name="scenarioData" id="scenarioData${test.testSeq}">${test.scenarioData}</textarea>
+				</div>
+				<div class="divTableCell">
+					<textarea rows="10" cols="20" name="expected" id="expected${test.testSeq}">${test.expected}</textarea>
+				</div>
+				<div class="divTableCell">
+					<textarea rows="10" cols="20" name="result" id="result${test.testSeq}">${test.result}</textarea>
+				</div>
+				<div class="divTableCell">
+					<textarea rows="10" cols="20" name="remark" id="remark${test.testSeq}">${test.remark}</textarea>
+					<div style="float:right">
+						<input type="button" onclick="updateBtn(${test.testSeq})" value="수정" class="updelBtn">
+						<input type="button" onclick="historyBack(${test.testSeq})" value="뒤로가기" class="updelBtn">
+					</div>
+				</div>
+			</div>
+		</c:forEach>
+	</div>
+</div>
+<input type="button" onclick="location.href='createTest.do'" value="+ 추가" id="createBtn" class="hidden">
 
 <!-- //////////////////////////script//////////////////////////////////////// -->
 <script>
-/* 마우스오버 */
+$(document).ready(function(){
+	console.log("ready");
+	
+	// 첫 화면에는 무료로 행 추가 버튼 증정 이벤트
+	let createBtn = document.getElementById("createBtn");
+	if(document.getElementById("only") == null){
+		createBtn.classList.remove("hidden");
+	} else{
+		createBtn.classList.add("hidden");
+	}
+	
+}); // document.ready end
 
-/* 1. tr에 마우스를 올린다. 2. 행에 맞는 수정/삭제 버튼을 보이게한다.(클래스 정보 변경)
-   1. tbody의 tr 갯수 정보를 받아온다.(var i) 2. i만큼 반복하며 tr 클래스들에 여기서 쓸 이름을 새로 붙혀준다.
- 	3. 그 값에 올라가면 버튼이 보이게 한다 */
-/*
-// 원하는 class 정보 받아오기
-var btnCell = document.querySelectorAll(".btnCell");	// class="btnCell"인 객체 모두를 선택
-var textCell = document.querySelectorAll(".textCell");
-var selector = document.querySelectorAll(".textHover");
-// tbody에서 tr 갯수
-var tr_count = $('#tbody tr').length;
-console.log(btnCell);		// btnCell List
-console.log(btnCell[0]);	// 1st btnCell
-console.log(btnCell[3]);	// 4th btnCell
-console.log(btnCell[4]);	// undefined
-console.log(selector);		// textHover List
-console.log(tr_count);		// tr count = 4
-for(var i=0;i<tr_count;i++){
-	console.log(i);			// i = 0~3
-	console.log("selector : "+selector[i]);	// selector[0]~[3]
-	console.log("cell : "+btnCell[i]);		// btnCell[0]~[3]
+// 마우스 오버
+// select text와 session 이름이 같다면 수정버튼 출력
+// loginUser == selected 인 목록 출력
+function selectList(frm){
+	let btnDiv = document.querySelectorAll(".btnDiv");		// class="btnDev"인 객체 모두를 선택
+	let upBtn = document.querySelector('#updtBtn');			// 수정 버튼
+	let addBtn = document.querySelector('#createBtn');		// 행 생성 버튼
+	let user = document.getElementById("loginUser").value;	// 로그인유저
+	let selected = document.getElementById("selectUser");	// selectbox에서 선택된 사람
+	let hover = document.querySelectorAll(".textHover");	// 테이블 행
+	let tr_count = $('.btnDiv').length;						// 버튼 division 수
+	
+	 
+	
+	
+	// text 추출
+	let selectText = selected.options[selected.selectedIndex].text;
+	// value 추출
+	let num = selected.options[selected.selectedIndex].value;
+	let man = document.querySelectorAll("."+selectText);
+	/* console.log(selected); */
+	console.log(man[0].classList.value);
+	console.log(man[0] != null);
+	console.log(man[1] != null);
+	console.log(man[2] != null);
+	
+	// 본인일 떄
+	if(selectText == user){
+		
+		// tr 행 수만큼 반복
+		for(let i=0;i<tr_count;i++){
+			
+			// loginUser == selector인 hover만 출력
+			hover[i].classList.add("hidden");
+			if(man[i] != null){
+				console.log(man[i].classList.value);
+				console.log(hover[i].classList.value);
+				man[i].classList.remove("hidden");
+			}
+				
+			
+			// 마우스 오버
+			// i번째 selector에 마우스 올라올 시 up, del 버튼 hidden 클래스 제거
+			hover[i].addEventListener("mouseover", function(){
+				btnDiv[i].classList.remove("hidden"); // Uncaught TypeError: Cannot read properties of undefined (reading 'classList') at HTMLTableRowElement.<anonymous>
+			});
+			// i번째 selector에 마우스 나갈 시 up, del 버튼 hidden 클래스 생성
+			hover[i].addEventListener("mouseout", function(){
+				btnDiv[i].classList.add("hidden");
+			});
+			
+			
+		}
+		
+		// 머릿글 수정 / 추가 버튼 출력
+		upBtn.classList.remove("hidden");
+		addBtn.classList.remove("hidden");
+	// 전체를 눌렀을 때
+	} else if(num == 0){
+		// 전체 목록 출력(페이지 새로고침)
+		location.reload();
+		
+	// 본인이 아닐 때
+	} else{
+		
+		// 수정, 삭제 버튼 숨기기
+		for(let i=0;i<tr_count;i++){
+			// loginUser != selector인 hover hidden
+			hover[i].classList.add("hidden");
+			
+			// 마우스 오버
+			hover[i].addEventListener("mouseover", function(){
+			btnDiv[i].classList.add("hidden");
+			});
+		}
+		
+		// 수정 / 추가 버튼 숨기기
+		upBtn.classList.add("hidden");
+		addBtn.classList.add("hidden");
+	}
+	
+}
 
-	// i번째 selector에 마우스 올라올 시 up, del 버튼 hidden 클래스 제거
-	selector[i].addEventListener("mouseover", function(){
-		btnCell[i].classList.remove("hidden"); // Uncaught TypeError: Cannot read properties of undefined (reading 'classList') at HTMLTableRowElement.<anonymous>
-		textCell[i].classList.add("hidden");
-	});
-	// i번째 selector에 마우스 나갈 시 up, del 버튼 hidden 클래스 생성
-	selector[i].addEventListener("mouseout", function(){
-		btnCell[i].classList.add("hidden");
-		textCell[i].classList.remove("hidden");
+
+/* 사용자, 담당자 수정 페이지 */
+function viewUpdateHeadBtn(seq){
+	console.log(seq);
+	let update = document.getElementById("updateHead"+seq);
+	let text = document.getElementById("textHead"+seq);
+	console.log("update : "+update+" text : "+text);
+	text.classList.add("hidden");
+	update.classList.remove("hidden");
+}
+
+/* 사용자, 담당자 수정 */
+function updateHeadBtn(testSeq){
+	let customer = document.getElementById("customer").value;
+	let manager = document.getElementById("loginUser").value;
+	
+	$.ajax({
+		type: "get",
+		url: "updateHeadTest",
+		dataType: "text",
+		data: {testSeq:testSeq, customer:customer, manager:manager},
+		success: function(data){
+			location.reload();
+			console.log('top update done.');
+		}
 	});
 }
-*/
+
 /* 행 수정 페이지 */
-function viewUpdateBtn(testSeq){
-	document.getElementById("update"+testSeq).classList.remove("hidden");
-	document.getElementById("text"+testSeq).classList.add("hidden");
+function viewUpdateBtn(seq,count){
+	console.log(seq,count);
+	
+	document.getElementById("update"+seq).classList.remove("hidden");
+	document.getElementById("text"+seq).classList.add("hidden");
 }
 
 /* 행 수정 */
 function updateBtn(testSeq){
-	var scenarioNo = document.getElementById("scenarioNo"+testSeq).value;
-	var scenarioData = document.getElementById("scenarioData"+testSeq).value;
-	var expected = document.getElementById("expected"+testSeq).value;
-	var result = document.getElementById("result"+testSeq).value;
-	var remark = document.getElementById("remark"+testSeq).value;	
+	let textRow = document.getElementById("text"+testSeq);
+	let updtRow = document.getElementById("update"+testSeq);
+	let scenarioNo = document.getElementById("scenarioNo"+testSeq).value;
+	let scenarioData = document.getElementById("scenarioData"+testSeq).value;
+	let expected = document.getElementById("expected"+testSeq).value;
+	let result = document.getElementById("result"+testSeq).value;
+	let remark = document.getElementById("remark"+testSeq).value;
 	
 	$.ajax({
 		type: "get",
@@ -315,8 +426,8 @@ function updateBtn(testSeq){
 		data: {testSeq:testSeq, scenarioNo:scenarioNo, scenarioData:scenarioData,
 			expected:expected, result:result, remark:remark},
 		success: function(data){
-			console.log('update done.');
 			location.reload();
+			console.log('update done.');
 		}, error: function(data){
 			alert('fail');
 		}
@@ -324,47 +435,31 @@ function updateBtn(testSeq){
 }
 
 
-/* 사용자, 담당자 수정 페이지 */
-function viewUpdateHeadBtn(testSeq){
-	/* document.getElementById("updateHead").classList.remove("hidden"); */
-	document.getElementById("updateHead"+testSeq).classList.remove("hidden");
-	/* document.getElementById("textHead").classList.add("hidden"); */
-	document.getElementById("textHead"+testSeq).classList.add("hidden");
-}
-
-/* 사용자, 담당자 수정 */
-function updateHeadBtn(testSeq){
-	var customer = document.getElementById("customer"+testSeq).value;
-	var manager = document.getElementById("manager"+testSeq).value;
-	
-	$.ajax({
-		type: "get",
-		url: "updateHeadTest",
-		dataType: "text",
-		data: {testSeq:testSeq, customer:customer, manager:manager},
-		success: function(data){
-			console.log('top update done.');
-			location.reload();
-		}
-	});
-}
-
 /* 수정 중 뒤로가기 경고 */
-function historyBack(){
-	var check = confirm('수정사항을 저장하지 않고 돌아가시겠습니까?');
+function historyBack(seq){
+	let check = confirm('수정사항을 저장하지 않고 돌아가시겠습니까?');
+	let text = $('#scenarioData'+seq).val();
+	console.log("text : "+text);
+	
 	if(check){
-		location.reload();
+		// 원래 값을 반환
+		/* text.location.reload(); */
+		// hidden
+		document.getElementById("text"+seq).classList.remove("hidden");
+		document.getElementById("update"+seq).classList.add("hidden");
 	}
 }
 
 /* 행 삭제 */
 function deleteBtn(testSeq){
-	var check = confirm('정말로 삭제하시겠습니까?')
+	let check = confirm('정말로 삭제하시겠습니까?')
 	if(check){
 		location.href = 'deleteTest?testSeq='+testSeq;
 	}
 	return check;
 }
+
+
 
 </script>
 </body>

@@ -26,19 +26,19 @@
 	</select>
 	
 	<!-- 단위테스트 유저별 목록출력  -->
-	<select id="selectUserTest" parameterType="java.lang.Integer" resultMap="testMap" resultType="testVO">
+	<select id="selectUserTest" parameterType="hashMap" resultType="hashMap">
 		<![CDATA[
 			select * from test
-			where project_seq = #{projectSeq}
+			where project_seq = #{projectSeq} and manager = #{manager}
 			order by scenario_no;
 		]]>
 	</select>
 	
 	<!-- 행 추가 -->
-	<select id="insertTest" parameterType="java.lang.Integer">
+	<select id="insertTest" parameterType="testVO">
 		<![CDATA[
-			insert into test(project_seq)
-			value (#{projectSeq});
+			insert into test(project_seq, manager)
+			value (#{projectSeq}, #{manager});
 		]]>
 	</select>
 	

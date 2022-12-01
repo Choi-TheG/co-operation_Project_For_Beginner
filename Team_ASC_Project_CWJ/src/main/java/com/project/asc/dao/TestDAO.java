@@ -1,6 +1,9 @@
 package com.project.asc.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +34,23 @@ public class TestDAO {
 		
 		return list;
 	}
-	public boolean insertTest(int projectSeq) {
+	
+	public List<HashMap<Integer, ArrayList<TestVO>>> selectListByUser(String manager){
+		List<HashMap<Integer, ArrayList<TestVO>>> list = null;
+		
+		list = (ArrayList) sqlSession.selectList("mapper.test.selectListByUser", manager);
+		
+		return list;
+	}
+	
+	public boolean insertTest(int projectSeq, String manager) {
 		boolean flag = false;
-		int affectedCount = sqlSession.insert("mapper.test.insertTest", projectSeq);
+
+		TestVO test = new TestVO();
+		test.setInsertRow(projectSeq, manager);
+		System.out.println("DAO test : "+test);
+		int affectedCount = sqlSession.insert("mapper.test.insertTest", test);
+		
 		if(affectedCount>0) {
 			flag = true;
 		}
@@ -47,6 +64,9 @@ public class TestDAO {
 		
 		if(affectedCount>0) {
 			flag = true;
+			System.out.println("DAO update done");
+		} else {
+			System.out.println("DAO fail");
 		}
 		
 		return flag;

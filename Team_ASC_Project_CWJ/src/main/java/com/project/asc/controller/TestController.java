@@ -1,6 +1,8 @@
 package com.project.asc.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.project.asc.dao.ProjectDAO;
-import com.project.asc.dao.TestDAO;
 import com.project.asc.service.TestService;
 import com.project.asc.vo.ProjectVO;
 import com.project.asc.vo.TeamMemberVO;
@@ -28,13 +28,6 @@ public class TestController {
 	@Autowired
 	private TestService testService;
 	
-	/* 유저별 리스트 */
-	public ModelAndView TestListByUser(HttpServletRequest request, HttpServletResponse response) {
-		ModelAndView mav = new ModelAndView();
-		
-		
-		return mav;
-	}
 	
 	/* unit test main */
 	@RequestMapping(value = "/manageTest", method = RequestMethod.GET)
@@ -48,7 +41,14 @@ public class TestController {
 		
 		// get userName in session
 		UserVO member = (UserVO) request.getSession().getAttribute("member");
-		String user = member.getName();
+		String loginUser = member.getName();
+		
+		// manager 정보 session에서 가져오기
+		TestVO vo = new TestVO();
+		vo.setManager("selectedUser : "+loginUser);
+		
+		String selectedUser = (String) request.getAttribute("selectedUser");
+		System.out.println(selectedUser);
 		
 		//list
 		ArrayList<TeamMemberVO> userList = new ArrayList<TeamMemberVO>();
@@ -56,9 +56,29 @@ public class TestController {
 		userList = testService.selectUserList(teamId);
 		list = testService.selectAllTest(projectSeq);
 		
-		mav.addObject("userList",userList);
+		
+		mav.addObject("loginUser", loginUser);
+		mav.addObject("userList", userList);
 		mav.addObject("list", list);
+		
 		mav.setViewName("/test/manageTest");
+		return mav;
+	}
+	
+	/* 유저별 리스트 */
+	@RequestMapping(value = "/listByUser", method = RequestMethod.GET)
+	public ModelAndView listByUser(@RequestParam("manager") String manager,
+			HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("list manager : "+manager);
+		ModelAndView mav = new ModelAndView();
+		// get projectSeq
+		ProjectVO project = (ProjectVO) request.getSession().getAttribute("project");
+		int projectSeq = project.getProjectSeq();
+		List<HashMap<Integer, ArrayList<TestVO>>> list = null;
+		list = testService.selectListByUser(manager);
+		
+		mav.addObject("list",list);
+		mav.setViewName("/test/listByUser");
 		return mav;
 	}
 	
@@ -66,12 +86,16 @@ public class TestController {
 	@RequestMapping(value="/createTest", method=RequestMethod.GET)
 	public ModelAndView createTest(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mav = new ModelAndView();
-		//get projectSeq to session
+		// get projectSeq to session
 		ProjectVO project = (ProjectVO) request.getSession().getAttribute("project");
 		int projectSeq = project.getProjectSeq();
 		
-		// insert
-		boolean flag = testService.insertTest(projectSeq);
+		// get member to session
+		UserVO member = (UserVO) request.getSession().getAttribute("member");
+		String manager = member.getName();
+		
+ 		// insert
+		boolean flag = testService.insertTest(projectSeq, manager);
 		
 		if(flag) {
 			System.out.println("insert done");
@@ -85,17 +109,22 @@ public class TestController {
 	@RequestMapping(value="updateHeadTest", method=RequestMethod.GET)
 	public ModelAndView updateHeadTest(@ModelAttribute("info") TestVO test,
 			HttpServletRequest request, HttpServletResponse response) {
+//		System.out.println("controllerVO : "+test);
 		ModelAndView mav = new ModelAndView();
 		boolean flag = false;
-//		System.out.println("controllerVO : "+test);
 		
-		testService.updateHeadTest(test);
+		// get userName in session
+		UserVO member = (UserVO) request.getSession().getAttribute("member");
+		String user = member.getName();
+		
+		flag = testService.updateHeadTest(test);
 		if(flag) {
 			System.out.println("test head update done");
 		} else {
 			System.out.println("test head update fail");
 		}
 		
+		test.setManager(user);
 		mav.setViewName("redirect:/test/manageTest");
 		return mav;
 	}

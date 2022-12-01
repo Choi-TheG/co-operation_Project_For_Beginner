@@ -1,6 +1,9 @@
 package com.project.asc.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,23 +32,31 @@ public class TestService {
 		return list;
 	}
 	
-	public boolean insertTest(int projectSeq) {
+	public List<HashMap<Integer,ArrayList<TestVO>>> selectListByUser(String manager){
+		List<HashMap<Integer,ArrayList<TestVO>>> list = null;
+		
+		
+		return list;
+	}
+	
+	public boolean insertTest(int projectSeq, String manager) {
 		boolean flag = false;
-		testDAO.insertTest(projectSeq);
+		
+		testDAO.insertTest(projectSeq, manager);
 		
 		return flag;
 	}
 	
 	public boolean updateHeadTest(TestVO test) {
 		boolean flag = false;
-		testDAO.updateHeadTest(test);
+		flag = testDAO.updateHeadTest(test);
 		
 		return flag;
 	}
 	
 	public boolean updateTest(TestVO test) {
 		boolean flag = false;
-		testDAO.updateTest(test);
+		flag = testDAO.updateTest(test);
 		
 		return flag;
 	}

@@ -62,9 +62,16 @@
       <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/>
    </definition>
    
-   <!-- 테스트 -->
+   <!-- 단위 테스트 : 메인 -->
    <definition name="/test/manageTest" extends="baseLayout">
-      <put-attribute name="title" value="테스트" />
+      <put-attribute name="title" value="단위테스트" />
+      <put-attribute name="body" value="/WEB-INF/views/process/test/manageTest.jsp" />
+      <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/>
+   </definition>
+   
+   <!-- 단위 테스트 : 유저별 목록 -->
+   <definition name="/test/listByUser" extends="baseLayout">
+      <put-attribute name="title" value="유저별 단위테스트" />
       <put-attribute name="body" value="/WEB-INF/views/process/test/manageTest.jsp" />
       <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/>
    </definition>

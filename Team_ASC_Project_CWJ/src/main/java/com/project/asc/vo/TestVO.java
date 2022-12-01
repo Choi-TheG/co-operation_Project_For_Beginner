@@ -10,6 +10,7 @@ public class TestVO {
 	private String expected;
 	private String result;
 	private String remark;
+	private String insertRow;
 	
 	public TestVO() {
 		super();
@@ -27,6 +28,15 @@ public class TestVO {
 		this.expected = expected;
 		this.result = result;
 		this.remark = remark;
+	}
+	
+	public String getInsertRow() {
+		return insertRow;
+	}
+	
+	public void setInsertRow(int projectSeq, String manager) {
+		this.projectSeq = projectSeq;
+		this.manager = manager;
 	}
 	
 	public int getTestSeq() {

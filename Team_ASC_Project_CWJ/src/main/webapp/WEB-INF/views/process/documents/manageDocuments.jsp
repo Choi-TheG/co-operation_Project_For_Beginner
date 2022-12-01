@@ -196,7 +196,7 @@ $(document).ready(function() {
 	
 	$("#complete2").on("click", function() {
 		
-		const message = confirm('현재 과정을 완료하시겠습니까?');
+		let message = confirm('현재 과정을 완료하시겠습니까?');
 		
 		if(message == true) {
 			alert("완료");
@@ -220,10 +220,10 @@ $(document).ready(function() {
 function updateBtn(seq){
 	window.screen.width // 좌우화면 크기
 	window.screen.height // 상하화면 크기
-	const popupWidth = 600;
-	const popupHeight = 500;
-	const popupX = (window.screen.width /2) - (popupWidth /2); // 팝업창 가로크기(X축) 1/2
-	const popupY = (window.screen.height /2) - (popupHeight /2); // 팝업창 세로크기(Y축) 1/2
+	let popupWidth = 600;
+	let popupHeight = 500;
+	let popupX = (window.screen.width /2) - (popupWidth /2); // 팝업창 가로크기(X축) 1/2
+	let popupY = (window.screen.height /2) - (popupHeight /2); // 팝업창 세로크기(Y축) 1/2
 	window.open("./viewUpdateDocument?documentsSeq="+seq,"문서 수정","width="+popupWidth+", height="+popupHeight+", top="+popupY+", left="+popupX+", directories=0, location=0, menubar=0, toolbar=0, scrollbars=0, status=1");
 	/* window.opener="nothing";
 	window.open('','_parent','');
@@ -233,7 +233,7 @@ function updateBtn(seq){
 
 // 삭제 버튼 confirm
 function deleteBtn(seq){
-	const check = confirm('삭제하시겠습니까?');
+	let check = confirm('삭제하시겠습니까?');
 	if(check){
 		location.href='deleteDocument?documentsSeq='+seq;
 	}
