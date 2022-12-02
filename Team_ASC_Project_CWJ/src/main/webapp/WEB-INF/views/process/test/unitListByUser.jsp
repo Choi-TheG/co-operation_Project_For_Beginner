@@ -171,7 +171,7 @@ select{
 					<input type="hidden" id="only">
 				</div>
 				<div class="divTableHead" style="font-weight: bold;text-align: right;">
-					
+					사용자
 				</div>
 				<div class="divTableHead" style="text-align: right">
 					${test.customer}
@@ -196,7 +196,7 @@ select{
 					
 				</div>
 				<div class="divTableHead" style="font-weight: bold;text-align: right;">
-					
+					사용자
 				</div>
 				<div class="divTableHead" style="text-align: right">
 					<input type="text" value="${test.customer}" name="customer" id="customer">
@@ -298,6 +298,10 @@ function selectList(frm){
 	let num = selected.options[selected.selectedIndex].value;
 	let man = document.querySelectorAll("."+selectText);
 	/* console.log(selected); */
+	console.log(man[0].classList.value);
+	console.log(man[0] != null);
+	console.log(man[1] != null);
+	console.log(man[2] != null);
 	
 	// 본인일 떄
 	if(selectText == user){
@@ -331,8 +335,8 @@ function selectList(frm){
 		addBtn.classList.remove("hidden");
 	// 전체를 눌렀을 때
 	} else if(num == 0){
-		// 전체 목록 출력
-		
+		// 전체 목록 출력(페이지 새로고침)
+		location.reload();
 		
 	// 본인이 아닐 때
 	} else{
@@ -340,7 +344,7 @@ function selectList(frm){
 		// 수정, 삭제 버튼 숨기기
 		for(let i=0;i<tr_count;i++){
 			// loginUser != selector인 hover hidden
-			/* hover[i].classList.add("hidden"); */
+			hover[i].classList.add("hidden");
 			
 			// 마우스 오버
 			hover[i].addEventListener("mouseover", function(){
@@ -352,6 +356,7 @@ function selectList(frm){
 		upBtn.classList.add("hidden");
 		addBtn.classList.add("hidden");
 	}
+	
 }
 
 
@@ -425,14 +430,9 @@ function historyBack(seq){
 	if(check){
 		// 원래 값을 반환
 		/* text.location.reload(); */
-		
-		if(document.getElementById("text"+seq)!=null){
-			// hidden
-			document.getElementById("text"+seq).classList.remove("hidden");
-			document.getElementById("update"+seq).classList.add("hidden");
-		} else{
-			location.reload();
-		}
+		// hidden
+		document.getElementById("text"+seq).classList.remove("hidden");
+		document.getElementById("update"+seq).classList.add("hidden");
 	}
 }
 

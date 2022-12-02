@@ -45,23 +45,32 @@ public class TestController {
 		
 		// manager 정보 session에서 가져오기
 		TestVO vo = new TestVO();
-		vo.setManager("selectedUser : "+loginUser);
-		
 		String selectedUser = (String) request.getAttribute("selectedUser");
-		System.out.println(selectedUser);
 		
-		//list
 		ArrayList<TeamMemberVO> userList = new ArrayList<TeamMemberVO>();
-		ArrayList<TestVO> list = new ArrayList<TestVO>();
 		userList = testService.selectUserList(teamId);
-		list = testService.selectAllTest(projectSeq);
 		
+		if(selectedUser != null) {
+			vo.setManager(selectedUser);
+			System.out.println(selectedUser);
+			ArrayList<TestVO> list = new ArrayList<TestVO>();
+			list = testService.selectListByUser(projectSeq, selectedUser);
+			
+			mav.addObject("loginUser", loginUser);
+			mav.addObject("UserList", userList);
+			mav.addObject("list",list);
+			mav.setViewName("/test/managerTest?manager="+selectedUser);
+		} else if(selectedUser == "전체" || selectedUser == null){
+			//list
+			ArrayList<TestVO> list = new ArrayList<TestVO>();
+			list = testService.selectAllTest(projectSeq);
+			
+			mav.addObject("loginUser", loginUser);
+			mav.addObject("userList", userList);
+			mav.addObject("list", list);
+			mav.setViewName("/test/manageTest");
+		}
 		
-		mav.addObject("loginUser", loginUser);
-		mav.addObject("userList", userList);
-		mav.addObject("list", list);
-		
-		mav.setViewName("/test/manageTest");
 		return mav;
 	}
 	
@@ -74,10 +83,12 @@ public class TestController {
 		// get projectSeq
 		ProjectVO project = (ProjectVO) request.getSession().getAttribute("project");
 		int projectSeq = project.getProjectSeq();
-		List<HashMap<Integer, ArrayList<TestVO>>> list = null;
-		list = testService.selectListByUser(manager);
+
+		ArrayList<TestVO> list = new ArrayList<TestVO>();
 		
-		mav.addObject("list",list);
+		list = testService.selectListByUser(projectSeq, manager);
+		
+		mav.addObject("listByUser",list);
 		mav.setViewName("/test/listByUser");
 		return mav;
 	}

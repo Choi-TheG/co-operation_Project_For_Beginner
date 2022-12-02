@@ -35,10 +35,10 @@ public class TestDAO {
 		return list;
 	}
 	
-	public List<HashMap<Integer, ArrayList<TestVO>>> selectListByUser(String manager){
-		List<HashMap<Integer, ArrayList<TestVO>>> list = null;
+	public ArrayList<TestVO> selectListByUser(TestVO vo){
+		ArrayList<TestVO> list = null;
 		
-		list = (ArrayList) sqlSession.selectList("mapper.test.selectListByUser", manager);
+		list = (ArrayList) sqlSession.selectList("mapper.test.selectListByUser", vo);
 		
 		return list;
 	}

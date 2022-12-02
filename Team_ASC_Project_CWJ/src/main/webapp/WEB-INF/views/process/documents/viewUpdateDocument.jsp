@@ -135,65 +135,39 @@ button, input[type=button]{
 </style>
 </head>
 <body>
-<form id="updateForm" action="./updateDocument?documentsSeq=${documents.documentsSeq}&fileName=${documents.fileName}&realFileName=${realFileName}" method="POST" enctype="multipart/form-data">
-<div id="headDiv">
-	ㅇㅅㅇ
-</div>
-<div class="popContent">
-	<label for="documentsName">문서명</label>
-	<input type="text" value="${documents.documentsName}" id="documentsName" name="documentsName" placeholder="문서명">
-</div>
-<div class="popContent">
-	<label for="dropbox">아래 영역에 드래그로 파일을 업로드 할 수 있습니다.</label>
-	<br><input id="dropbox" value="드롭박스">
-</div>
-<div class="popContent">
-	파일 업로드
-	<c:choose>
-		<c:when test="${documents.realFileName ne null}">
-			<div style="float:left;width:100%">
-				업로드된 파일 
-				<a href="./downloadFile?fileName=${documents.fileName}&realFileName=${documents.realFileName}">
-					${documents.realFileName}
-				</a>
-			</div><br>
-			<div style="float:right;width:100%;">
-				<input type="file" name="uploadFile">
-			</div>
-		</c:when>
-		<c:otherwise>
-			<div>
-				<input type="file" name="uploadFile">
-			</div>
-		</c:otherwise>
-	</c:choose>
-	<div class="filebox">
-			<input class="upload-name" value="업로드 파일" style="width:70%;" disabled="disabled">
-			<label for="ex_filename">업로드</label> 
-			<input type="file" id="ex_filename" class="upload-hidden" name="uploadFile">
+<form id="updateForm" action="./updateDocument?documentsSeq=${documents.documentsSeq}&fileName=${documents.fileName}&realFileName=${documents.realFileName}" method="POST" enctype="multipart/form-data">
+	<div id="headDiv">
+		ㅇㅅㅇ
 	</div>
-</div>
-<div>
-	<input type="button" value="수정" id="updateBtn" onclick="updateCell();">
-</div>
+	<div class="popContent">
+		<label for="documentsName">문서명</label>
+		<input type="text" value="${documents.documentsName}" id="documentsName" name="documentsName" placeholder="문서명">
+	</div>
+	<div class="popContent">
+		<label for="dropbox">아래 영역에 드래그로 파일을 업로드 할 수 있습니다.</label>
+		<br><input id="dropbox" value="드롭박스">
+	</div>
+	<div class="popContent">
+		파일 업로드
+	
+				<div style="float:left;width:100%">
+					업로드된 파일 
+					<a href="./downloadFile?fileName=${documents.fileName}&realFileName=${documents.realFileName}">
+						${documents.realFileName}
+					</a>
+				</div><br>
+				<div style="float:right;width:100%;">
+					<input type="file" name="uploadFile">
+				</div>
+	
+	</div>
+	<div>
+		<input type="button" value="수정" id="updateBtn" onclick="updateCell()">
+	</div>
 </form>
 <script>
 $(document).ready(function(){
 	console.log('ready');
-	
-	// upload file 이름추출
-	let fileTarget = $('.filebox .upload-hidden');
-	
-	fileTarget.on('change', function(){  // 값이 변경되면
-	if(window.FileReader){  // modern browser
-		let filename = $(this)[0].files[0].name;
-	} 
-	else {  // old IE
-		let filename = $(this).val().split('/').pop().split('\\').pop();  // 파일명만 추출
-	}
-	// 추출한 파일명 삽입
-	$(this).siblings('.upload-name').val(filename);
-	}); // upload file end
 	
 }); // document end
 
@@ -201,9 +175,15 @@ $(document).ready(function(){
 function updateCell(){
 	
 	console.log(window.opener);
-	$('#updateForm').submit();
-	window.opener.location.reload();
-	window.close();
+	let text = $('#documentsName').val();
+	
+	if(text == null){
+		alert('문서명을 입력해주세요');
+	} else{
+		$('#updateForm').submit();
+		window.close();
+		window.opener.location.reload();
+	}
 }
 
 /* 

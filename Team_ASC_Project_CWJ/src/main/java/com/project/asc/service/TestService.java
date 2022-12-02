@@ -32,9 +32,13 @@ public class TestService {
 		return list;
 	}
 	
-	public List<HashMap<Integer,ArrayList<TestVO>>> selectListByUser(String manager){
-		List<HashMap<Integer,ArrayList<TestVO>>> list = null;
+	public ArrayList<TestVO> selectListByUser(int projectSeq, String manager){
+		ArrayList<TestVO> list = new ArrayList<TestVO>();
+		TestVO vo = new TestVO();
+		vo.setProjectSeq(projectSeq);
+		vo.setManager(manager);
 		
+		list = testDAO.selectListByUser(vo);
 		
 		return list;
 	}

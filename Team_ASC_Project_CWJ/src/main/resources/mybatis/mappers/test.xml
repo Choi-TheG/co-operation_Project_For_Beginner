@@ -21,12 +21,12 @@
 		<![CDATA[
 			select * from test
 			where project_seq = #{projectSeq}
-			order by manager,scenario_no;
+			order by manager, scenario_no;
 		]]>
 	</select>
 	
 	<!-- 단위테스트 유저별 목록출력  -->
-	<select id="selectUserTest" parameterType="hashMap" resultType="hashMap">
+	<select id="selectListByUser" parameterType="testVO" resultType="testVO" resultMap="testMap">
 		<![CDATA[
 			select * from test
 			where project_seq = #{projectSeq} and manager = #{manager}
