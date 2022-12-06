@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.wbsDetail">
+
+   <resultMap id="wbsDetailMap" type="wbsDetailVO">
+      <id property="wbsDetailSeq" column="wbs_detail_seq"/>
+      <result property="taskSeq" column="task_seq"/>
+      <result property="userSeq" column="user_seq"/>
+      <result property="operation" column="operation"/>
+      <result property="date" column="date"/>
+      <result property="startTime" column="start_time"/>
+      <result property="endTime" column="end_time"/>
+      <result property="leadTime" column="lead_time"/>
+      <result property="updateCount" column="update_count"/>
+      <result property="updateReason" column="update_reason"/>
+      <result property="finishYn" column="finish_yn"/>
+
+   </resultMap>
+   
+   <select id="selectWbsDetailList" resultMap="wbsDetailMap" resultType="wbsDetailVO" parameterType="java.lang.Integer">
+      <![CDATA[
+        select wbs_detail_seq,
+        	   task_seq,
+        	   user_seq,
+        	   substring(start_time,1,10) as date,
+        	   substring(start_time,12,8) as start_time,
+        	   substring(end_time,12,8) as end_time,
+        	   substring(TIMEDIFF(end_time, start_time),1,5) as lead_time,
+        	   operation,
+        	   update_count,
+        	   update_reason,
+        	   finish_yn
+          from wbs_detail 
+         where task_seq = #{taskSeq};
+      ]]>
+   </select>
+   
+   <select id="createWbsDetail" parameterType="wbsDetailVO">
+      <![CDATA[
+        insert into wbs_detail(task_seq,user_seq,operation,start_time,end_time,finish_yn) 
+        values (#{taskSeq},#{userSeq},#{operation},#{startTime},#{endTime},'N')
+      ]]>
+   </select>
+   
+   <select id="updateWbsDetail" parameterType="wbsDetailVO">
+      <![CDATA[
+        update wbs_detail
+           set operation = #{operation},
+               start_time = #{startTime},
+               end_time = #{endTime},
+               update_count = update_count + 1,
+               update_reason = #{updateReason},
+           	   update_time = now()
+         where wbs_detail_seq = #{wbsDetailSeq}
+      ]]>
+   </select>
+   
+   <select id="finishWbsDetail" parameterType="wbsDetailVO">
+      <![CDATA[
+        update wbs_detail
+           set finish_yn = #{finishYn},
+           	   update_time = now()
+         where wbs_detail_seq = #{wbsDetailSeq}
+      ]]>
+   </select>
+   
+   <select id="selectTaskPercentage" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+      <![CDATA[
+        select count(case when finish_yn = 'Y' then 1 end) / count(1) * 100 as percentage
+          from wbs_detail
+         where task_seq = #{taskSeq}
+      ]]>
+   </select>
+   
+</mapper>

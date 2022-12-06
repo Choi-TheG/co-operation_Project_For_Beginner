@@ -12,49 +12,32 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <style>
 #container, html{
-	width: 584px;
-	height: 500px;
+	width: 350px;
+	height: 300px;
 }
-
 #content{
 	float:left;
 	width: 100%;
 	height: 100%;
 }
-
 #header, #footer, #sidebar-left{
 	height: 0px;
 	padding: 0px;
 	border: 0px;
 	width: 0px;
 }
-
-body{
-	margin: 0px;
-}
-
+body{margin: 0px;}
 a{text-decoration:none;color:#000;}
 table{
 	width: 100%;
 	
 }
-
 th{
 	text-align: center;
 	border-bottom: 1px solid #c2c2c2;
 	font-size: 20px;
 }
-
 tr:hover{ background-color:#f5f5f5; }
-
-input[type=text]{
-	border: 0px;
-	width: 98%;
-	height: 30px;
-	font-size: 20px;
-	display: center;
-}
-
 button, input[type=button]{
 	color: white;
     background-color: #384D59;
@@ -64,6 +47,7 @@ button, input[type=button]{
     font-weight: bold;
     margin-right: 5px;
 }
+input[type=file]{width:340px; height:30px;}
 
 .filebox input[type="file"] {
   position: absolute;
@@ -75,7 +59,6 @@ button, input[type=button]{
   clip:rect(0,0,0,0);
   border: 0;
 }
-
 .filebox label {
   display: inline-block;
   padding: .5em .75em;
@@ -107,9 +90,48 @@ button, input[type=button]{
   appearance: none;
 }
 
+/* documentsName */
+.input-wrapper{
+	position:relative;
+	margin:10px 0;
+}
+.input-wrapper > input{
+	background:transparent;
+	border: none;
+	border-bottom: solid 1px #ccc;
+	padding:20px 0px 5px 0px;
+	font-size:14pt;
+	width:340px;
+}
 
+input::placeholder{	color:transparent; }
+input:placeholder-shown + label{
+	color:#aaa;
+	font-size:14pt;
+	top:15px;
+}
+input:focus + label, label{
+	color:#8aa1a1;
+	font-size:10pt;
+	pointer-events: none;
+	position: absolute;
+	left:0px;
+	top:0px;
+	transition: all 0.2s ease ;
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+}
+input:focus, input:not(:placeholder-shown){
+	border-bottom: solid 1px #2b96f1;
+	outline:none;
+}
+input:focus + label{ color:#2b96f1;}
+input:not(:placeholder-shown){border-bottom: 1px solid #8aa1a1;}
+
+/* id, class */
 #updateBtn{
-	width: 580px;
+	width: 340px;
 	margin: 0px;
 	margin-left: 2px;
 	height: 25px;
@@ -124,42 +146,72 @@ button, input[type=button]{
 	border-radius: 5px;
 	background-color: #f5f5f5;
 }
-
-.popContent{margin-left:4px;}
+.popContent{margin-left:6px;margin-bottom:20px;}
 #headDiv{
-	height: 30px;
+	height: 34px;
+	margin-bottom:20px;
 	background-color: #0F2859;
 	color: #fff;
 	font-size: 24px;
 }
+#nameCell{
+	margin-top: 20px;
+	margin-left: 5px;
+}
+#link:hover, #link:focus { 
+	font-weight: bold;
+	animation-duration: 1s;
+	animation-name: rainbowLink; 
+	animation-iteration-count: infinite; 
+} 
+@keyframes rainbowLink {     
+	0% { color: #ff2a2a; }
+	15% { color: #ff7a2a; }
+	30% { color: #ffc52a; }
+	45% { color: #43ff2a; }
+	60% { color: #2a89ff; }
+	75% { color: #202082; }
+	90% { color: #6b2aff; } 
+	100% { color: #e82aff; }
+}
+.dropBox{
+	height: 250px;
+	overflow: auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 5px;
+	border: 4px dashed #ddd;
+	user-select: none;
+	transition: 0.4s;
+}
+
+.active { background: #c8c8c8; }
+
 </style>
 </head>
 <body>
 <form id="updateForm" action="./updateDocument?documentsSeq=${documents.documentsSeq}&fileName=${documents.fileName}&realFileName=${documents.realFileName}" method="POST" enctype="multipart/form-data">
 	<div id="headDiv">
-		ㅇㅅㅇ
+		문서 관리
 	</div>
-	<div class="popContent">
-		<label for="documentsName">문서명</label>
+	<div class="popContent input-wrapper">
 		<input type="text" value="${documents.documentsName}" id="documentsName" name="documentsName" placeholder="문서명">
+		<label for="documentsName">문서명</label>
 	</div>
 	<div class="popContent">
-		<label for="dropbox">아래 영역에 드래그로 파일을 업로드 할 수 있습니다.</label>
-		<br><input id="dropbox" value="드롭박스">
-	</div>
-	<div class="popContent">
-		파일 업로드
-	
-				<div style="float:left;width:100%">
-					업로드된 파일 
-					<a href="./downloadFile?fileName=${documents.fileName}&realFileName=${documents.realFileName}">
+		<div style="font-size:14px;margin-bottom:10px;font-weight:bold">파일 업로드</div>	
+			<div style="margin-bottom:20px;">
+				<input type="file" name="uploadFile">
+			</div>
+			<div style="margin-bottom:10px;">
+				<div style="font-size:14px;font-weight:bold">업로드된 파일</div>
+				<div style="height:24px;margin-top:10px;">
+					<a id="link" href="./downloadFile?fileName=${documents.fileName}&realFileName=${documents.realFileName}">
 						${documents.realFileName}
 					</a>
-				</div><br>
-				<div style="float:right;width:100%;">
-					<input type="file" name="uploadFile">
 				</div>
-	
+			</div>
 	</div>
 	<div>
 		<input type="button" value="수정" id="updateBtn" onclick="updateCell()">
@@ -169,33 +221,47 @@ button, input[type=button]{
 $(document).ready(function(){
 	console.log('ready');
 	
+	/* let drop = document.querySelector(".dropBox");
+	let text = document.querySelector(".dropBox h3");
+	
+	drop.addEventListener("drop", (e) => {
+		e.preventDefault();
+		console.log(e);
+		drop.className = "dropBox";
+		
+		let files = [...e.dataTransfer?.files];
+		
+		text.innerHTML = files.map(v => v.name).join("<br/>");
+		drop.classList.remove("active");
+	});
+	drop.addEventListener("dragover", (e) => {
+		e.preventDefault();
+		
+		drop.classList.add("active");
+	});
+	drop.addEventListener("dragenter", (e) => {
+		e.preventDefault();
+		
+		drop.classList.add("active");
+	});
+	drop.addEventListener("dragleave", (e) => {
+		e.preventDefault();
+		
+		drop.classList.remove("active");
+	});
+	 */
 }); // document end
 
-// 수정하고 부모창에 반영하고 창 닫기
 function updateCell(){
+	let formName = document.getElementById("updateForm");
+	let text = document.getElementById("documentsName").value;
 	
-	console.log(window.opener);
-	let text = $('#documentsName').val();
-	
-	if(text == null){
+	if(text == ''){
 		alert('문서명을 입력해주세요');
 	} else{
 		$('#updateForm').submit();
-		window.close();
-		window.opener.location.reload();
 	}
 }
-
-/* 
-$(function(){
-	$('#updateBtn').click(function(){
-		$('#updateForm').submit();
-		setTimeout(function(){
-			window.close();
-		},100);
-	});
-}); */
-
 </script>
 </body>
 </html>

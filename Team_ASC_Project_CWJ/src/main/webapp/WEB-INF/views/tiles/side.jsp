@@ -51,7 +51,7 @@
         <div class="sideMenu"><a href="../project/manageProject">프로세스</a></div>
         <div class="sideMenu"><a href="../wbs/manageWbs">WBS</a></div>
         <div class="sideMenu"><a href="${contextPath}/board/boardListPaging?projectSeq=${project.projectSeq}&pageNum=1">이슈리스트</a></div>
-   		<div class="sideMenu"><a href="../project/manageMOM">회의록</a></div>
+   		<div class="sideMenu"><a href="../project/minutesList?pageNum=1">회의록</a></div>
     </div>       
 </div>
 </body>

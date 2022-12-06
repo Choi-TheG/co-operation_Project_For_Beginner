@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -107,6 +108,9 @@ public class BoardController {
 		if(count == 1) {
 			mav.addObject("ext", ext);
 		}
+		String boardContent = board.getBoardContent();
+		boardContent = boardContent.replace("\r\n", "<br>");
+		board.setBoardContent(boardContent);
 		mav.addObject("board", board);
 		//댓글리스트 조회
 		ArrayList<ReplyVO> reply = boardService.selectReply(boardSeq);
@@ -224,7 +228,9 @@ public class BoardController {
 		}
 		
 		boolean flag = boardService.updateBoard(board);
+	
 		if(flag) {
+			
 			mav.addObject("board", board);
 			viewName = "redirect:./readBoard?boardSeq="+boardSeq;
 		}
@@ -406,16 +412,13 @@ public class BoardController {
 	}
 	
 	/* 댓글 삭제 */
-	@RequestMapping(value="/deleteReply", method=RequestMethod.GET)
-	public ModelAndView deleteReply(@RequestParam("boardSeq") String boardSeq, @RequestParam("replySeq") String replySeq, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		ModelAndView mav = new ModelAndView();
-		String viewName = "redirect:./readBoard?boardSeq="+boardSeq;
-		boolean flag = boardService.deleteReply(replySeq);
-		if(flag) {
-			mav.setViewName(viewName);
-		}
-		return mav;
-	}
+	@RequestMapping(value="/deleteReply/{replySeq}", method=RequestMethod.DELETE)
+	@ResponseBody
+	public boolean deleteReply(@PathVariable String replySeq) throws Exception {
+	System.out.println("controller");
+	boolean flag = boardService.deleteReply(replySeq);
+	return flag;
+}
 	
 	/* 댓글 수정 */
 	@RequestMapping(value="/updateReply", method=RequestMethod.POST)

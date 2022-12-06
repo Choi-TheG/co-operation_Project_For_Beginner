@@ -1,5 +1,6 @@
 package com.project.asc.vo;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +16,7 @@ public class BoardVO {
 	private String createDate;
 	private String downloadPath;
 	private String id;
+	private String name;
 	private int startRowNum;
 	private int viewRows;
 	private String fileName;
@@ -23,11 +25,16 @@ public class BoardVO {
 	private String filePath;
 	private String keyword;
 	private ArrayList<ReplyVO> replyList;
+	private Timestamp insertTime;
+	private String teamId;
+	private String operation;
+	private String startTime;
+	private String endTime;
 
 	public BoardVO() {}
 	public BoardVO(int boardSeq, int userSeq, int projectSeq, String boardCategory, 
-			String boardTitle, String boardContent, String completeYn, String createDate,String downloadPath, String id,int startRowNum,
-			int viewRows,String fileName,MultipartFile uploadFile, String filePath,String keyword, String realFileName) {
+			String boardTitle, String boardContent, String completeYn, String createDate,String downloadPath, String id, String name, int startRowNum,
+			int viewRows,String fileName,MultipartFile uploadFile, String filePath,String keyword, String realFileName, Timestamp insertTime, String teamId, String operation, String startTime, String endTime) {
 		this.boardSeq = boardSeq;
 		this.userSeq = userSeq;
 		this.projectSeq = projectSeq;
@@ -38,6 +45,7 @@ public class BoardVO {
 		this.createDate = createDate;
 		this.downloadPath = downloadPath;
 		this.id = id;
+		this.name = name;
 		this.startRowNum = startRowNum;
 		this.viewRows = viewRows;
 		this.fileName = fileName;
@@ -45,8 +53,44 @@ public class BoardVO {
 		this.filePath = filePath;
 		this.keyword = keyword;
 		this.realFileName = realFileName;
+		this.insertTime = insertTime;
+		this.teamId = teamId;
+		this.operation = operation;
+		this.startTime = startTime;
+		this.endTime = endTime;
 	}
 	
+	
+	public String getStartTime() {
+		return startTime;
+	}
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+	public String getEndTime() {
+		return endTime;
+	}
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+	public String getTeamId() {
+		return teamId;
+	}
+	public void setTeamId(String teamId) {
+		this.teamId = teamId;
+	}
+	public String getOperation() {
+		return operation;
+	}
+	public void setOperation(String operation) {
+		this.operation = operation;
+	}
+	public Timestamp getInsertTime() {
+		return insertTime;
+	}
+	public void setInsertTime(Timestamp insertTime) {
+		this.insertTime = insertTime;
+	}
 	public ArrayList<ReplyVO> getReplyList() {
 		return replyList;
 	}
@@ -70,6 +114,12 @@ public class BoardVO {
 	}
 	public void setId(String id) {
 		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 	public int getBoardSeq() {
 		return boardSeq;
@@ -165,7 +215,9 @@ public class BoardVO {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return boardSeq+","+userSeq+","+projectSeq+","+boardCategory+","+boardTitle+","+boardContent+","+completeYn+","+createDate+","+fileName;
+		return "boardSeq="+boardSeq+", userSeq="+userSeq+", projectSeq="+projectSeq+", boardCategory="+boardCategory+
+				", boardTitle="+boardTitle+", boardContent="+boardContent+", completeYn="+completeYn+
+				", createDate="+createDate+", fileName="+fileName+", teamId="+teamId+", keyword="+keyword+", operation="+operation;
 	}
 
 }

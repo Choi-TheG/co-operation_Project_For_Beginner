@@ -25,20 +25,33 @@
       <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/>
    </definition>
    
-   <!-- 문서 관리 : 메인 -->
+   <!-- 문서 관리 -->
    <definition name="/documents/manageDocuments" extends="baseLayout">
       <put-attribute name="title" value="문서 관리" />
       <put-attribute name="body" value="/WEB-INF/views/process/documents/manageDocuments.jsp" />
       <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/>
    </definition>
    
-   <!-- 문서관리 : 수정페이지 이동 -->
    <definition name="/documents/viewUpdateDocument" extends="baseLayout">
       <put-attribute name="title" value="문서 수정" />
       <put-attribute name="header" value="" />
       <put-attribute name="body" value="/WEB-INF/views/process/documents/viewUpdateDocument.jsp" />
       <put-attribute name="side" value=""/> 
       <put-attribute name="footer" value="" />
+   </definition>
+   
+   <definition name="/documents/updateDocument" extends="baseLayout">
+      <put-attribute name="title" value="문서 수정" />
+      <put-attribute name="header" value="" />
+      <put-attribute name="body" value="/WEB-INF/views/process/documents/reloadPage.jsp" />
+      <put-attribute name="side" value=""/> 
+      <put-attribute name="footer" value="" />
+   </definition>
+   
+   <definition name="/documents/listByUser" extends="baseLayout">
+      <put-attribute name="title" value="문서 수정" />
+      <put-attribute name="body" value="/WEB-INF/views/process/documents/manageDocuments.jsp" />
+      <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/>
    </definition>
    
    <!-- 기능 정의 -->
@@ -70,10 +83,18 @@
    </definition>
    
    <!-- 단위 테스트 : 유저별 목록 -->
-   <definition name="/test/listByUser" extends="baseLayout">
-      <put-attribute name="title" value="유저별 단위테스트" />
+	<definition name="/test/listByUser" extends="baseLayout">
+		<put-attribute name="title" value="유저별 단위테스트" />
+		<put-attribute name="body" value="/WEB-INF/views/process/test/manageTest.jsp" />
+		<put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/>
+	</definition>
+   
+   <!-- 단위 테스트 : 전체화면 -->
+   <definition name="/test/fullHD" extends="baseLayout">
+      <put-attribute name="title" value="단위테스트" />
+      <put-attribute name="header" value="" />
       <put-attribute name="body" value="/WEB-INF/views/process/test/manageTest.jsp" />
-      <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/>
+      <put-attribute name="side" value=""/>
    </definition>
    
    <!-- 완성 -->

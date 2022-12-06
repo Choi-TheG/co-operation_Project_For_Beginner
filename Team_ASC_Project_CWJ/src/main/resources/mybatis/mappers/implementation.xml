@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.impl">
+
+   <resultMap id="boardMap" type="boardVO">
+      <id property="boardSeq" column="board_seq"/>
+      <result property="userSeq" column="user_seq"/>
+      <result property="projectSeq" column="project_seq"/>
+      <result property="boardCategory" column="board_category"/>
+      <result property="boardTitle" column="board_title"/>
+      <result property="boardContent" column="board_content"/>
+      <result property="completeYn" column="complete_yn"/>
+      <result property="createDate" column="create_date"/>
+	  <result property="id" column="id"/>
+	  <result property="startRowNum" column="startRowNum"/>
+	  <result property="viewRows" column="viewRows"/>
+	  <result property="fileName" column="fileName"/>
+	  <result property="realFileName" column="realFileName"/>
+	  <result property="insertTime" column="insert_time"/>
+	  <result property="teamId" column="team_id"/>
+	  <result property="operation" column="operation"/>
+	  <result property="startTime" column="start_time"/>
+	  <result property="endTime" column="end_time"/>
+   </resultMap>
+ 
+   
+   <select id="insertImplementation" parameterType="boardVO">
+      <![CDATA[
+        insert into board(user_seq,project_seq,board_category,board_title,board_content,fileName,realFileName,complete_yn) 
+        values (#{userSeq},#{projectSeq},'구현',#{boardTitle},#{boardContent},#{fileName},#{realFileName},'I')
+      ]]>
+   </select>
+ 
+   <select id="selectImplementation" parameterType="String" resultMap="boardMap" resultType="boardVO">
+      <![CDATA[
+        select b.board_title, b.board_content, b.user_seq, b.board_seq, b.project_seq, b.fileName, b.realFileName, b.create_date, u.id, u.name, b.insert_time
+        from board b
+        left join user u
+        on b.user_seq = u.user_seq
+        where b.project_seq = #{projectSeq}
+        and b.board_category = '구현'
+        order by board_title desc, insert_time desc;
+      ]]>
+   </select>  
+   
+   <select id="deleteImplementationFile" parameterType="String">
+      <![CDATA[
+        update board
+        set fileName = "",
+        	realFileName = ""
+        where board_seq = #{boardSeq}
+      ]]>
+   </select>
+
+   <select id="deleteImplementation" parameterType="String" resultMap="boardMap">
+      <![CDATA[
+        delete from board
+        where board_seq = #{boardSeq}
+      ]]>
+   </select>
+   
+   <select id="selectOneImplementation" parameterType="String" resultMap="boardMap" resultType="boardVO">
+      <![CDATA[
+        select b.board_title, b.board_content, b.user_seq, b.board_seq, b.project_seq, b.fileName, b.realFileName, b.create_date, u.id, u.name, b.insert_time
+        from board b
+        left join user u
+        on b.user_seq = u.user_seq
+        where b.board_seq = #{boardSeq}
+      ]]>
+   </select> 
+   
+   <select id="updateImplementation" parameterType="boardVO" resultMap="boardMap">
+      <![CDATA[
+        update board
+        set board_title = #{boardTitle},
+        	board_content = #{boardContent},
+        	fileName = #{fileName},
+        	realFileName = #{realFileName},
+        	update_time = now()
+        where board_seq = #{boardSeq}
+      ]]>
+   </select>   
+   
+   <!-- 전체 게시글 수 조회 -->
+	<select id="selectTotalImplementationNum" resultType="int" >
+      <![CDATA[
+        select count(*) from board
+		where project_seq = #{projectSeq} and
+			board_category = '구현'
+      ]]>
+   </select>
+   
+   <!-- 게시글 조회(페이징) -->
+	<select id="selectImplementationListPaging" parameterType="java.lang.Integer" resultMap="boardMap" resultType="boardVO">
+      <![CDATA[
+        select b.board_title, b.board_content, b.user_seq, b.board_seq, b.project_seq, b.fileName, b.realFileName, b.create_date, u.id, u.name, b.insert_time
+		from board b
+		left join user u
+		on b.user_seq=u.user_seq
+		where b.project_seq=#{projectSeq}
+		and board_category = '구현'
+		order by board_title desc, insert_time desc limit #{startRowNum},#{viewRows};
+      ]]>
+   </select>
+   
+    <!-- 팀멤버 조회 -->
+	<select id="selectTeamMember" resultMap="boardMap" resultType="boardVO" >
+      <![CDATA[
+        select u.id, u.user_seq, t.team_id, p.project_seq , u.name
+		from team_member t
+		left join project p
+		on p.team_id = t.team_id
+		left join user u
+		on u.user_seq = t.user_seq
+		where project_seq = #{projectSeq}
+      ]]>
+   </select>
+   
+   <!-- 게시판 검색글 수 -->
+      <select id="searchImplementationCount" parameterType="boardVO" resultType="java.lang.Integer" >
+      <![CDATA[
+		select count(*) 
+		from board b
+		left join user u
+		on b.user_seq=u.user_seq
+		where project_seq=#{projectSeq} and board_category = '구현'
+		and board_title like concat('%',#{boardTitle},'%')
+		and (board_content like concat('%',#{keyword},'%') 
+			or board_title like concat('%',#{keyword},'%')
+			or u.name like concat('%',#{keyword},'%'))
+		
+      ]]>
+   </select>
+   
+   <!-- 게시글 검색 -->
+   <select id="searchImplementation" parameterType="boardVO" resultMap="boardMap" resultType="boardVO" >
+      <![CDATA[
+		select b.board_title, b.board_content, b.user_seq, b.board_seq, b.project_seq, b.fileName, b.realFileName, b.create_date, u.id, u.name, b.insert_time
+		from board b
+		left join user u
+		on b.user_seq=u.user_seq
+		where b.project_seq=#{projectSeq} and board_category = '구현'
+		and board_title like concat('%',#{boardTitle},'%')
+		and (board_content like concat('%',#{keyword},'%') 
+			or board_title like concat('%',#{keyword},'%')
+			or u.name like concat('%',#{keyword},'%'))
+		order by board_title desc, insert_time desc limit #{startRowNum},#{viewRows}
+      ]]>
+   </select>  
+   
+   <!-- 일정 정보 가져오기 -->
+   <select id="searchImplementationSchedule" parameterType="boardVO" resultMap="boardMap" resultType="boardVO" >
+      <![CDATA[
+		select distinct w.wbs_detail_seq, w.operation, w.start_time, w.end_time, b.user_seq, b.project_seq
+		from wbs_detail w left join task b on b.user_seq=w.user_seq and b.task_seq = w.task_seq
+		where project_seq=#{projectSeq} 
+			and b.user_seq=#{userSeq}
+			and (substring(w.start_time,1,10)=#{boardTitle}
+				or substring(w.end_time,1,10)=#{boardTitle})
+      ]]>
+   </select>  
+   
+</mapper>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.minutes">
+
+	<resultMap id="minutesMap" type="minutesVO">
+		<id property="minutesSeq" column="minutes_seq"/>
+		<result property="userSeq" column="user_seq"/>
+		<result property="projectSeq" column="project_seq"/>
+		<result property="attendees" column="attendees"/>
+		<result property="extraPerson" column="extra_person"/>
+		<result property="meetingPlace" column="meeting_place"/>
+		<result property="meetingTitle" column="meeting_title"/>
+		<result property="meetingContent" column="meeting_content"/>
+		<result property="meetingResult" column="meeting_result"/>
+		<result property="meetingRemark" column="meeting_remark"/>
+		<result property="startTime" column="start_time"/>
+		<result property="endTime" column="end_time"/>
+		<result property="startRowNum" column="startRowNum"/>
+		<result property="viewRows" column="viewRows"/>
+		<result property="searchDate" column="searchDate"/>
+	</resultMap>
+	
+	<!-- 회의록 검색 -->
+	<select id="searchMinutes" parameterType="minutesVO" resultMap="minutesMap" resultType="minutesVO">
+		<![CDATA[
+			select m.minutes_seq, m.user_seq, m.project_seq, m.meeting_title, m.start_time, m.end_time, u.name
+			from minutes m
+			left join user u
+			on m.user_seq = u.user_seq
+			where m.project_seq = #{projectSeq}
+			and left(m.start_time,10) like concat('%', #{searchDate}, '%')
+			order by start_time desc limit #{startRowNum}, #{viewRows};
+		]]>
+	</select>
+	
+	<!-- 검색된 회의록 수 (카운트) -->
+	<select id="searchMinutesCount" parameterType="minutesVO" resultType="java.lang.Integer">
+		<![CDATA[
+			select count(*)
+			from minutes m
+			left join user u
+			on m.user_seq = u.user_seq
+			where m.project_seq = #{projectSeq}
+			and m.start_time like concat('%', #{searchDate}, '%')
+		]]>
+	</select>
+	
+	<!-- 회의록 수정 -->
+	<select id="updateMinutes" parameterType="minutesVO">
+		<![CDATA[
+			update minutes 
+			set attendees = #{attendees}, 
+				extra_person = #{extraPerson},
+				meeting_place = #{meetingPlace}, 
+				meeting_title = #{meetingTitle}, 
+				meeting_content = #{meetingContent}, 
+				meeting_result = #{meetingResult}, 
+				meeting_remark = #{meetingRemark},
+				update_time = now()
+			where minutes_seq = #{minutesSeq}
+		]]>
+	</select>
+	
+	<!-- 회의록 상세 보기 -->
+	<select id="selectMinutesByMinutesSeq" parameterType="java.lang.Integer" resultMap="minutesMap" resultType="minutesVO">
+		<![CDATA[
+			select * from minutes
+			where minutes_seq = #{minutesSeq}
+		]]>
+	</select>
+	
+	<!-- 회의록 작성 -->
+	<select id="insertMinutes" parameterType="minutesVO">
+		<![CDATA[
+			insert into minutes(user_seq, project_seq, attendees,extra_person, meeting_place, meeting_title, meeting_content, meeting_result, meeting_remark, start_time, end_time)
+			values(#{userSeq}, #{projectSeq}, #{attendees}, #{extraPerson}, #{meetingPlace}, #{meetingTitle}, #{meetingContent}, #{meetingResult}, #{meetingRemark}, #{startTime}, #{endTime})
+		]]>
+	</select>
+	
+	<!-- 프로젝트 번호로 회의록 목록 보기 (작성일자/시간/안건/작성자) + 페이징 -->
+	<select id="selectMinutesByProjectSeq" parameterType="java.lang.Integer" resultMap="minutesMap" resultType="minutesVO">
+		<![CDATA[
+			select m.minutes_seq, m.user_seq, m.project_seq, m.meeting_title, m.start_time, m.end_time, u.name
+			from minutes m
+			left join user u
+			on m.user_seq = u.user_seq
+			where m.project_seq = #{projectSeq}
+			order by start_time desc limit #{startRowNum}, #{viewRows};
+		]]>
+	</select>
+	
+	<!-- 전체 회의록 수 (카운트) -->
+	<select id="selectTotalMinutesNum" resultType="java.lang.Integer">
+		<![CDATA[
+			select count(*) from minutes
+			where project_seq = #{projectSeq}
+		]]>
+	</select>
+	
+</mapper>

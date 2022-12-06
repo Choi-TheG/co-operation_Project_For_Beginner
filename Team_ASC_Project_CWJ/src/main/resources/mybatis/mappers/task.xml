@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.task">
+
+   <resultMap id="taskMap" type="taskVO">
+      <id property="taskSeq" column="task_seq"/>
+      <result property="projectSeq" column="project_seq"/>
+      <result property="title" column="title"/>
+      <result property="step" column="step"/>
+      <result property="mainTask" column="main_task"/>
+      <result property="subTask" column="sub_task"/>
+      <result property="userSeq" column="user_seq"/>
+      <result property="finishYn" column="finish_yn"/>
+      <result property="percentage" column="percentage"/>
+      <result property="startDate" column="start_date"/>
+      <result property="endDate" column="end_date"/>
+      <result property="remark1" column="remark1"/>
+      <result property="remark2" column="remark2"/>
+
+   </resultMap>
+   
+   <select id="selectTaskList" resultMap="taskMap" resultType="taskVO" parameterType="java.lang.Integer">
+      <![CDATA[
+        select *
+          from task 
+         where project_seq = #{projectSeq}
+         order by (case when step='분석' then 1 when step='설계' then 2 when step ='구현' then 3 when step='검수' then 4 end),title;
+      ]]>
+   </select>
+   
+   <select id="createTask" parameterType="taskVO">
+      <![CDATA[
+        insert into task(project_seq,title,step,main_task,sub_task,remark1,remark2) 
+        values (#{projectSeq},#{title},#{step},#{mainTask},#{subTask},#{remark1},#{remark2})
+      ]]>
+   </select>
+   
+   <select id="updateTask" parameterType="taskVO">
+      <![CDATA[
+        update task
+           set title = #{title},
+           	   step = #{step},
+           	   main_task = #{mainTask},
+           	   sub_task = #{subTask},
+           	   remark1 = #{remark1},
+           	   remark2 = #{remark2},
+           	   update_time = now()
+         where task_seq = #{taskSeq}
+      ]]>
+   </select>
+   
+   <select id="deleteTask" parameterType="java.lang.Integer">
+      <![CDATA[
+        delete from task
+         where task_seq = #{taskSeq}
+      ]]>
+   </select>
+   
+   <select id="selectStepList" resultMap="taskMap" resultType="taskVO" parameterType="java.lang.Integer">
+      <![CDATA[
+        select step,
+        	   DATE_FORMAT(min(start_date), '%Y-%m-%d') as start_date,
+        	   DATE_FORMAT(max(end_date), '%Y-%m-%d') as end_date
+    	  from task 
+    	 where project_seq = #{projectSeq}
+	  group by step
+	  order by (case when step='분석' then 1 when step='설계' then 2 when step ='구현' then 3 when step='검수' then 4 end);
+      ]]>
+   </select>
+   
+   <select id="selectStepMainList" resultMap="taskMap" resultType="taskVO" parameterType="java.lang.Integer">
+      <![CDATA[
+        select step,main_task,
+        	   DATE_FORMAT(min(start_date), '%Y-%m-%d') as start_date,
+        	   DATE_FORMAT(max(end_date), '%Y-%m-%d') as end_date
+    	  from task
+    	 where project_seq = #{projectSeq}
+	  group by step,main_task 
+	  order by (case when step='분석' then 1 when step='설계' then 2 when step ='구현' then 3 when step='검수' then 4 end) , title;
+      ]]>
+   </select>
+   
+   <select id="selectStepMainSubList" resultMap="taskMap" resultType="taskVO" parameterType="java.lang.Integer">
+      <![CDATA[
+        select task_seq,
+        	   step,
+        	   user_seq,
+        	   main_task,
+        	   sub_task,
+        	   finish_yn,
+        	   percentage,
+        	   DATE_FORMAT(start_date, '%Y-%m-%d') as start_date,
+        	   DATE_FORMAT(end_date, '%Y-%m-%d') as end_date
+    	  from task 
+    	 where project_seq = #{projectSeq}
+	  order by (case when step='분석' then 1 when step='설계' then 2 when step ='구현' then 3 when step='검수' then 4 end) , title;
+      ]]>
+   </select>
+   
+   <select id="updateWbs" parameterType="taskVO">
+      <![CDATA[
+        update task
+           set user_seq = #{userSeq},
+           	   start_date = #{startDate},
+           	   end_date = #{endDate},
+           	   update_time = now()
+         where task_seq = #{taskSeq}
+      ]]>
+   </select>
+   
+   <select id="selectStepMainSubOne" resultMap="taskMap" resultType="taskVO" parameterType="java.lang.Integer">
+      <![CDATA[
+        select task_seq,
+        	   step,
+        	   user_seq,
+        	   main_task,
+        	   sub_task,
+        	   finish_yn,
+        	   percentage,
+        	   DATE_FORMAT(start_date, '%Y-%m-%d') as start_date,
+        	   DATE_FORMAT(end_date, '%Y-%m-%d') as end_date
+    	  from task 
+    	 where task_seq = #{task_seq};
+      ]]>
+   </select>
+   
+   <select id="updateTaskPercentage" parameterType="taskVO">
+      <![CDATA[
+        update task
+           set percentage = #{percentage},
+           	   finish_yn = #{finishYn},
+           	   update_time = now()
+         where task_seq = #{taskSeq}
+      ]]>
+   </select>
+   
+</mapper>

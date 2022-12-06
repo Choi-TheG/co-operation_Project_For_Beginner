@@ -33,8 +33,6 @@ public class DocumentsController {
 	@Autowired
 	private DocumentsService documentsService;
 	
-	private String path="C:\\dev\\downloads";
-	
 	/* test */
 	@RequestMapping(value="/test", method=RequestMethod.POST)
 	public ModelAndView test(HttpServletRequest request, HttpServletResponse response) {
@@ -102,9 +100,6 @@ public class DocumentsController {
 			@RequestParam("documentsName") String documentsName,
 			@RequestParam("uploadFile") MultipartFile uploadFile,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
-		System.out.println("up : "+uploadFile);
-		System.out.println("name : "+documentsName);
-		
 		ModelAndView mav = new ModelAndView();
 		// session에서 유저 이름 가져오기
 		UserVO member = (UserVO) request.getSession().getAttribute("member");
@@ -160,7 +155,7 @@ public class DocumentsController {
 		documentsService.updateDocument(vo);
 		
 		mav.addObject("vo",vo);
-		mav.setViewName("redirect:/documents/manageDocuments");
+		mav.setViewName("/documents/updateDocument");
 		return mav;
 	}
 	

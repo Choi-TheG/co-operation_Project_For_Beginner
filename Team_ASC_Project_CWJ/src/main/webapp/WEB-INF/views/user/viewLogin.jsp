@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,33 +8,6 @@
 <title>로그인</title>
 </head>
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-	$("#loginBtn").on('submit',function(){ // submit 버튼 클릭시 발동 , 아이디 중복이거나 중복 체크 안했을경우 진행 안됨
-			let id = document.getElementById("id").value; //숨겨진 인풋 텍스트에 Y값이 없으면 진행 안됨
-			let pwd = document.getElementById("pwd").value;
-			$.ajax({
-				type : "GET",
-				url : "/checkIdPwd",
-				dataType : "text",
-				data : {userId : id , userPwd : pwd},
-				success : function(data,status){
-					let jsonBoolean = JSON.parse(data);
-					if(!jsonBoolean){
-						alert("존재하지 않는 계정 입니다");
-						return false;
-					}
-				},
-				error : function(data,status){
-					console.log("error");
-				},
-				complete : function(data,status){
-					console.log("finish");
-				}
-			}); //ajax
-    	}); //submit
-});//ready
-</script>
 <script type="text/javascript">
 	function submit1(frm) {
 		frm.action="viewFindInfoId";
@@ -122,31 +96,74 @@ $(document).ready(function(){
 	input:focus, input:not(:placeholder-shown){
 	  border-bottom: solid 1px #8aa1a1;
 	  outline:none;
-	}	
+	}
 </style>
 <body>
-<form action="login" method="POST" id="loginForm">
+<form action="login" method="POST" id="loginForm" name="form1">
 <input type="hidden" value ="${projectYN}" name="projectYN"><!-- 로그인 하지않고 프로젝트 생성 눌렀을경우 Y -->
 <div class="board-main">
 
      <div class="input-box">
-         <input id="username" type="text" name="id" id="id" placeholder="아이디">
+         <input id="username" type="text" name="id" placeholder="아이디">
          <label for="username">아이디</label>
      </div>
 
      <div class="input-box">
-         <input id="password" type="password"  name="pwd" id="pwd" placeholder="비밀번호">
+         <input id="password" type="password"  name="pwd" placeholder="비밀번호">
          <label for="password">비밀번호</label>
      </div>
 </br>
 		<div class="button-position">
-			<input class="button login-button" type="submit" value="로그인" id="loginBtn"></br>
+			<input class="button login-button" type="submit" value="로그인" id="loginBtn" onclick="nullCheck(); return false;"></br>
 			<input class="button search-button" type="button" value="아이디 찾기" onclick="return submit1(this.form);">
 			<input class="button search-button" type="button" value="비밀번호 찾기" onclick="return submit2(this.form);">
 		</div>
 </div>
 </form>
-
+<script type="text/javascript">
+	function nullCheck() {
+		let frm = document.form1;
+		if(!frm.id.value){
+			alert("아이디를 입력하세요");
+			frm.id.focus();
+			return false;
+		}
+		if(!frm.pwd.value){
+			alert("비밀번호를 입력하세요");
+			frm.pwd.focus();
+			return false;
+		} else {
+			let id = frm.id.value;
+			let pwd = frm.pwd.value;
+			
+			$.ajax({
+				type:'get',
+				url:'./checkIdPwd',
+				dataType:'text',
+				data:{
+					userId:id,
+					userPwd:pwd
+				},
+				success:function(data,status){
+					let jsonBoolean = JSON.parse(data);
+					if(!jsonBoolean){
+						alert("아이디/비밀번호를 확인해주세요");
+						return false;
+					} else {
+						frm.submit();
+					}
+				},
+				error : function(data,status){
+					console.log("error");
+					console.log(url);
+				},
+				complete:function(data,status){
+					console.log("complete");
+				}
+			})
+		}
+	}
+</script>
 </body>
 </html>
 

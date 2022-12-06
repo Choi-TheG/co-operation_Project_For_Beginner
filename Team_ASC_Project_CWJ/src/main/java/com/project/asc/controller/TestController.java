@@ -45,32 +45,22 @@ public class TestController {
 		
 		// manager 정보 session에서 가져오기
 		TestVO vo = new TestVO();
+		vo.setManager(loginUser);
+		
 		String selectedUser = (String) request.getAttribute("selectedUser");
+		System.out.println("selected : "+selectedUser);
 		
+		// list
 		ArrayList<TeamMemberVO> userList = new ArrayList<TeamMemberVO>();
+		ArrayList<TestVO> list = new ArrayList<TestVO>();
 		userList = testService.selectUserList(teamId);
+		list = testService.selectAllTest(projectSeq);
 		
-		if(selectedUser != null) {
-			vo.setManager(selectedUser);
-			System.out.println(selectedUser);
-			ArrayList<TestVO> list = new ArrayList<TestVO>();
-			list = testService.selectListByUser(projectSeq, selectedUser);
-			
-			mav.addObject("loginUser", loginUser);
-			mav.addObject("UserList", userList);
-			mav.addObject("list",list);
-			mav.setViewName("/test/managerTest?manager="+selectedUser);
-		} else if(selectedUser == "전체" || selectedUser == null){
-			//list
-			ArrayList<TestVO> list = new ArrayList<TestVO>();
-			list = testService.selectAllTest(projectSeq);
-			
-			mav.addObject("loginUser", loginUser);
-			mav.addObject("userList", userList);
-			mav.addObject("list", list);
-			mav.setViewName("/test/manageTest");
-		}
+		mav.addObject("loginUser", loginUser);
+		mav.addObject("userList", userList);
+		mav.addObject("list", list);
 		
+		mav.setViewName("/test/manageTest");
 		return mav;
 	}
 	
@@ -146,9 +136,7 @@ public class TestController {
 			@RequestParam("testSeq") String testSeq,
 			HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mav = new ModelAndView();
-//		System.out.println("controller VO : "+test);
-		boolean flag = false;
-		flag = testService.updateTest(test);
+		boolean flag = testService.updateTest(test);
 		
 		if(flag) {
 			System.out.println("test update done.");

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.project.asc.vo.MessageVO;
+import com.project.asc.vo.MinutesVO;
 import com.project.asc.vo.ProjectVO;
 import com.project.asc.vo.ScheduleVO;
 import com.project.asc.vo.TeamMemberVO;
@@ -21,7 +22,93 @@ public class ProjectDAO {
 	
 	@Autowired
 	private SqlSession sqlSession;
+	/* 회의록 검색 */
+	public ArrayList<MinutesVO> searchMinutes(MinutesVO minutes) {
+		// TODO Auto-generated method stub
+		ArrayList<MinutesVO> list = null;
+		
+		list = (ArrayList)sqlSession.selectList("mapper.minutes.searchMinutes", minutes);
+		
+		return list;
+	}
 	
+	/* 검색된 회의록 수 (카운트) */
+	public int searchMinutesNum(MinutesVO minutes) {
+		
+		int searchMinutesNum = 0;
+		
+		searchMinutesNum = sqlSession.selectOne("mapper.minutes.searchMinutesCount", minutes);
+	
+		return searchMinutesNum;
+	}
+
+	/* 회의록 수정 */
+	public boolean updateMinutes(MinutesVO minutes) {
+		// TODO Auto-generated method stub
+		boolean flag = false;
+
+		int affectedCount = sqlSession.update("mapper.minutes.updateMinutes", minutes);
+
+		if (affectedCount > 0) {
+			flag = true;
+		}
+
+		return flag;
+	}
+
+	/* 회의록 상세 보기 */
+	public MinutesVO readMinutes(int minutesSeq) {
+		// TODO Auto-generated method stub
+		MinutesVO minutes = null;
+
+		minutes = (MinutesVO) sqlSession.selectOne("mapper.minutes.selectMinutesByMinutesSeq", minutesSeq);
+
+		return minutes;
+	}
+
+	/* 회의록 작성 */
+	public boolean insertMinutes(MinutesVO minutes) {
+		// TODO Auto-generated method stub
+		boolean flag = false;
+
+		int affectedCount = sqlSession.insert("mapper.minutes.insertMinutes", minutes);
+
+		if (affectedCount > 0) {
+			flag = true;
+		}
+
+		return false;
+	}
+
+	/* 회의록 참여 인원 중 팀원들 체크박스 */
+	public ArrayList<TeamMemberVO> selectTeamMemberCheckbox(String teamId) {
+		ArrayList<TeamMemberVO> list = null;
+
+		list = (ArrayList) sqlSession.selectList("mapper.teamMember.selectTeamMemberCheckbox", teamId);
+
+		return list;
+	}
+	
+	/* 회의록 목록 + 페이징 */
+	public ArrayList<MinutesVO> selectMinutes(int projectSeq, int startRowNum, int viewRows) {
+		// TODO Auto-generated method stub
+		MinutesVO minutes = new MinutesVO();
+		minutes.setProjectSeq(projectSeq);
+		minutes.setStartRowNum(startRowNum);
+		minutes.setViewRows(viewRows);
+		
+		ArrayList<MinutesVO> list = (ArrayList) sqlSession.selectList("mapper.minutes.selectMinutesByProjectSeq", minutes);
+		
+		return list;
+	}
+	
+	/* 전체 회의록 수 (카운트) */
+	public int totalMinutesNum(int projectSeq) {
+		
+		int totalMinutesNum = sqlSession.selectOne("mapper.minutes.selectTotalMinutesNum", projectSeq);
+	
+		return totalMinutesNum;
+	}
 	/* 프로젝트 프로세스 완성 */
 	public boolean projectComplete(int projectSeq) {
 		// TODO Auto-generated method stub
@@ -133,7 +220,7 @@ public class ProjectDAO {
 	
 	public ProjectVO setProject(String seq) {
 		ProjectVO vo = null;
-		
+				
 		int projectSeq = Integer.parseInt(seq);
 		
 		vo = sqlSession.selectOne("mapper.project.selectProjectOne",projectSeq);

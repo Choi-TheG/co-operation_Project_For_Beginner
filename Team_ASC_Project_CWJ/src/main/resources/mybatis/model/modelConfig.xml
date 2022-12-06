@@ -16,5 +16,8 @@
 		<typeAlias type="com.project.asc.vo.TestVO"  alias="testVO" />
 		<typeAlias type="com.project.asc.vo.MessageVO"  alias="messageVO" />
 		<typeAlias type="com.project.asc.vo.ReplyVO"  alias="replyVO" />
+		<typeAlias type="com.project.asc.vo.MinutesVO"  alias="minutesVO" />
+		<typeAlias type="com.project.asc.vo.WbsDetailVO"  alias="wbsDetailVO" />
+		<typeAlias type="com.project.asc.vo.TaskVO"  alias="taskVO" />
 	</typeAliases>
 </configuration>

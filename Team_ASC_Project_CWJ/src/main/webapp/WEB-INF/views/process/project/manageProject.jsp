@@ -319,9 +319,9 @@ $(document).ready(function(){
 	<ul>
 		<li class="li1"><a href="../project/manageProject">프로젝트</a></li>
 		<li><a href="../documents/manageDocuments">문서 관리</a></li>
-		<li><a href="../function/manageFunction">기능</a></li>
+		<li><a href="../task/manageTask">기능</a></li>
 		<li><a href="../wbs/manageWbs">일정</a></li>
-		<li><a href="../implementation/viewImplementation">구현</a></li>
+		<li><a href="../implementation/viewImplementation?projectSeq=${project.projectSeq }&pageNum=1">구현</a></li>
 		<li><a href="../test/manageTest">테스트</a></li>
 		<li><a href="../project/viewComplete">완성</a></li>
 	</ul>

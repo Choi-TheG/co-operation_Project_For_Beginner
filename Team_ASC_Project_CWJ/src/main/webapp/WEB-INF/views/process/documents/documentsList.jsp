@@ -11,6 +11,10 @@
 <title>문서 관리</title>
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <style>
+//////////////////////////////////////
+///////////// 문서관리 유물 /////////////
+//////////////////////////////////////
+
 a{text-decoration:none;color:#000;}
 table{
 	width: 100%;

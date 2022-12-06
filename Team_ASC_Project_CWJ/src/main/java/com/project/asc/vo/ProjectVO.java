@@ -108,7 +108,7 @@ public class ProjectVO {
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "projectSeq : " + this.projectSeq +

@@ -15,6 +15,7 @@
       <result property="completeYn" column="complete_yn"/>
       <result property="createDate" column="create_date"/>
 	  <result property="id" column="id"/>
+	  <result property="name" column="name"/>
 	  <result property="startRowNum" column="startRowNum"/>
 	  <result property="viewRows" column="viewRows"/>
 	  <result property="fileName" column="fileName"/>
@@ -29,6 +30,7 @@
       <result property="replyContent" column="reply_content"/>
       <result property="createDate" column="create_date"/>
 	  <result property="id" column="id"/>
+	  <result property="name" column="name"/>
 
    </resultMap>
 
@@ -48,6 +50,8 @@
 		left join user u
 		on b.user_seq=u.user_seq
 		where b.project_seq=#{projectSeq}
+		and b.board_category not in('구현')
+			
       ]]>
    </select>
    
@@ -55,6 +59,7 @@
       <![CDATA[
         select * from board
         where board_seq=#{boardSeq}
+        and board_category not in('구현')
       ]]>
    </select>
    
@@ -103,6 +108,7 @@
       <![CDATA[
         select count(*) from board
 		where project_seq = #{projectSeq}
+		and board_category not in('구현')
       ]]>
    </select>
    <!-- 게시글 조회(페이징) -->
@@ -113,6 +119,7 @@
 		left join user u
 		on b.user_seq=u.user_seq
 		where b.project_seq=#{projectSeq}
+		and board_category not in('구현')
 		order by board_seq desc limit #{startRowNum},#{viewRows};
       ]]>
    </select>
@@ -129,6 +136,7 @@
 		and b.complete_yn like concat('%',#{completeYn},'%')
 		and (b.board_content like concat('%',#{keyword},'%') or b.board_title like concat('%',#{keyword},'%')
 			or u.id like concat('%',#{keyword},'%'))
+		and board_category not in('구현')
 		order by board_seq desc limit #{startRowNum},#{viewRows};
       ]]>
    </select>   
@@ -145,6 +153,7 @@
 		and complete_yn like concat('%',#{completeYn},'%')
 		and (board_content like concat('%',#{keyword},'%') or board_title like concat('%',#{keyword},'%')
 			or u.id like concat('%',#{keyword},'%'))
+		and board_category not in('구현')
 		
       ]]>
    </select> 

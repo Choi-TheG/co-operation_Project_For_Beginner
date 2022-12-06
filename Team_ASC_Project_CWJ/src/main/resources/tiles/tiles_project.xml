@@ -29,4 +29,28 @@
       <put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/>
    </definition>
    
+   <!-- 회의록 수정 페이지 -->
+	<definition name="/project/viewUpdateMinutes" extends="baseLayout">
+		<put-attribute name="title" value="회의록 수정" />
+		<put-attribute name="body" value="/WEB-INF/views/minutes/viewUpdateMinutes.jsp" />
+	</definition>
+   
+	<!-- 회의록 상세 보기 페이지 -->
+	<definition name="/project/readMinutes" extends="baseLayout">
+		<put-attribute name="title" value="회의록 상세보기" />
+		<put-attribute name="body" value="/WEB-INF/views/minutes/readMinutes.jsp" />
+	</definition>
+	
+	<!-- 회의록 작성 페이지 -->
+	<definition name="/project/viewWriteMinutes" extends="baseLayout">
+		<put-attribute name="title" value="회의록 작성" />
+		<put-attribute name="body" value="/WEB-INF/views/minutes/viewWriteMinutes.jsp" />
+	</definition>
+	
+	<!-- 회의록 목록 -->
+	<definition name="/project/minutesList" extends="baseLayout">
+		<put-attribute name="title" value="회의록 목록" />
+		<put-attribute name="body" value="/WEB-INF/views/minutes/minutesList.jsp" />
+		<put-attribute name="side" value="/WEB-INF/views/tiles/side.jsp"/>
+	</definition>
 </tiles-definitions>

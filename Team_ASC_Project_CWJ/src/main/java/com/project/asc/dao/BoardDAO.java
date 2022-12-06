@@ -158,4 +158,5 @@ public class BoardDAO {
 		System.out.println("count = "+selectReplyCount);
 		return selectReplyCount;
 	}
+
 }

@@ -15,6 +15,16 @@
       <result property="teamCategory" column="team_category"/>
    </resultMap>
 
+	<!-- 회의록 참여 인원 중 팀원들 체크박스 -->
+	<select id="selectTeamMemberCheckbox" resultMap="teamMemberMap" resultType="teamMemberVO" parameterType="String">
+		<![CDATA[
+			select a.team_member_seq, a.user_seq, b.name as user_name, a.team_id
+			from team_member a left outer join user b on a.user_seq = b.user_seq
+			where a.team_id = #{teamId} 
+			and b.status = 'Y' 
+		]]>
+	</select>
+
    <select id="selectMaxTeamId" resultType="teamMemberVO">
       <![CDATA[
         select max(team_id) as teamId 

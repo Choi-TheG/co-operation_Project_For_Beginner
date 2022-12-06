@@ -76,7 +76,7 @@
 </head>
 <body>
 <div id="msWrap">
-	<h1>Message</h1>
+	<h1>메세지 리스트</h1>
 	<table>
 		<c:forEach var="message" items="${list}">
 			<tr>

@@ -16,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.project.asc.service.ProjectService;
 import com.project.asc.vo.MessageVO;
+import com.project.asc.vo.MinutesVO;
+import com.project.asc.vo.PageVO;
 import com.project.asc.vo.ProjectVO;
 import com.project.asc.vo.ScheduleVO;
 import com.project.asc.vo.TeamMemberVO;
@@ -28,12 +30,223 @@ public class ProjectController {
 	@Autowired
 	private ProjectService projectService;
 	
-	/* 회의록 */
-	@RequestMapping(value = "/manageMOM", method = RequestMethod.GET)
-	public ModelAndView manageMOM(HttpServletRequest request, HttpServletResponse response) {
+	/* 회의록 검색 */
+	@RequestMapping(value = "/searchMinutes", method = {RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView searchMinutes(@ModelAttribute("info") MinutesVO minutes, HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mav = new ModelAndView();
-		String viewName = "/project/manageMOM";
 		
+		int projecSeq = Integer.parseInt(request.getParameter("projectSeq"));
+		String searchDate = request.getParameter("searchDate");
+		
+		minutes.setProjectSeq(projecSeq);
+		minutes.setSearchDate(searchDate);
+		
+		String viewName = "/project/minutesList";
+		
+		// 한번에 보여줄 게시글 수
+		int viewRows = 5;
+		
+		// 현재 페이지 번호
+		String nowPageNum = request.getParameter("pageNum");
+		
+		int pageNum = 1;
+		if (nowPageNum != null) {
+			pageNum = Integer.parseInt(nowPageNum);
+			viewName = "/project/minutesList";
+		}
+		
+		// 해당 페이지의 첫 번째 게시글 순서
+		int startRowNum = (pageNum - 1) * viewRows;
+		
+		minutes.setStartRowNum(startRowNum);
+		minutes.setViewRows(viewRows);
+		String boardNum = request.getParameter("totalBoardNum");
+		
+		// 전체 게시글 수
+		int totalBoardNum = projectService.searchMinutesNum(minutes);
+		if (totalBoardNum == 0) {
+			String nowTotalBoardNum = request.getParameter("totalBoardNum");
+			if (nowTotalBoardNum != null) {
+				totalBoardNum = Integer.parseInt(nowTotalBoardNum);
+			}
+		}
+		
+		// 전체 페이지 수
+		int totalPageNum = 0;
+		if(totalBoardNum % viewRows == 0) {
+			totalPageNum = (int)Math.ceil(totalBoardNum/viewRows);
+		} else {
+			totalPageNum = (int)Math.ceil(totalBoardNum/viewRows) + 1;
+		}
+		
+		// 페이징 관련 정보 page에 저장
+		PageVO page = new PageVO();
+		
+		page.setPageNum(pageNum);
+		page.setStartRowNum(startRowNum);
+		page.setTotalBoardNum(totalBoardNum);
+		page.setTotalPageNum(totalPageNum);
+		
+		mav.addObject("page", page);
+		
+		request.getSession().setAttribute("boardNum", totalBoardNum);
+		
+		int[] pageRange = new int[totalPageNum];
+		
+		for(int i=0; i>totalPageNum; i++) {
+			pageRange[i] = i + 1;
+		}
+		mav.addObject("pageRange", pageRange);
+		
+		// 페이징 적용된 리스트
+		ArrayList<MinutesVO> list = projectService.searchMinutes(minutes);
+		
+		System.out.println("searchDate = " + searchDate);
+		
+		mav.addObject("minutes", minutes);
+		mav.addObject("list", list);
+		mav.setViewName(viewName);
+		
+		return mav;
+	}
+	
+	/* 회의록 수정(수정 후 해당 회의록 읽기 화면) */
+	@RequestMapping(value = "/updateMinutes", method = RequestMethod.POST)
+	public ModelAndView updateMinutes(@ModelAttribute("info") MinutesVO minutes, HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mav = new ModelAndView();
+		
+		int minutesSeq = Integer.parseInt(request.getParameter("minutesSeq"));
+		boolean flag = projectService.updateMinutes(minutes);
+		
+		mav.addObject("minutes", minutes);
+		mav.setViewName("redirect:/project/readMinutes?minutesSeq=" + minutesSeq);
+		return mav;
+	}
+	
+	/* 회의록 수정 페이지 */
+	@RequestMapping(value = "/viewUpdateMinutes", method = {RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView viewUpdateMinutes(@RequestParam("minutesSeq") int minutesSeq, HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mav = new ModelAndView();
+		
+		ProjectVO project = (ProjectVO) request.getSession().getAttribute("project");
+		
+		String teamId = project.getTeamId();
+		
+		ArrayList<TeamMemberVO> list = projectService.selectTeamMemberCheckbox(teamId);
+		
+		System.out.println("att");
+		
+		MinutesVO minutes = projectService.readMinutes(minutesSeq);
+		String[] attendees = minutes.getAttendees().split(",");
+		
+		System.out.println("attendees = " + attendees.toString());
+		
+		mav.addObject("attendees", attendees);
+		mav.addObject("list", list);
+		mav.addObject("minutes", minutes);
+		mav.setViewName("/project/viewUpdateMinutes");
+		return mav;
+	}
+	
+	/* 회의록 상세 보기 */
+	@RequestMapping(value = "/readMinutes", method = {RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView readMinutes(@RequestParam("minutesSeq") int minutesSeq, HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mav = new ModelAndView();
+		
+		MinutesVO minutes = projectService.readMinutes(minutesSeq);
+		
+		mav.addObject("minutes", minutes);
+		mav.setViewName("/project/readMinutes");
+		return mav;
+	}
+	
+	/* 회의록 작성 */
+	@RequestMapping(value = "/writeMinutes", method = {RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView writeMinutes(@ModelAttribute("info") MinutesVO minutes, HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mav = new ModelAndView();
+		
+		boolean flag = false;
+		
+		flag = projectService.insertMinutes(minutes);
+		
+		mav.addObject("minutes", minutes);
+		mav.setViewName("redirect:/project/minutesList?projectSeq=" + minutes.getProjectSeq() + "&pageNum=1");
+		return mav;
+	}
+	
+	/* 회의록 작성 페이지 */
+	@RequestMapping(value = "/viewWriteMinutes", method = RequestMethod.GET)
+	public ModelAndView viewWriteMinutes(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mav = new ModelAndView();
+		
+		ProjectVO project = (ProjectVO) request.getSession().getAttribute("project");
+		
+		String teamId = project.getTeamId();
+		
+		ArrayList<TeamMemberVO> list = projectService.selectTeamMemberCheckbox(teamId);
+		
+		String viewName = "/project/viewWriteMinutes";
+		
+		mav.addObject("list", list);
+		mav.setViewName(viewName);
+		return mav;
+	}
+	
+	/* 회의록 목록 + 페이징 */
+	@RequestMapping(value = "/minutesList", method = RequestMethod.GET)
+	public ModelAndView minutesList(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mav = new ModelAndView();
+		String viewName = "/project/minutesList";
+		
+		ProjectVO project = (ProjectVO)request.getSession().getAttribute("project");
+		UserVO user = (UserVO)request.getSession().getAttribute("member");
+		
+		int projectSeq = project.getProjectSeq();
+		String name = user.getName();
+		
+		// 한번에 보여줄 게시글 수
+		int viewRows = 5;
+		
+		// 현재 페이지 번호
+		String nowPageNum = request.getParameter("pageNum");
+		System.out.println("nowPageNum = " + nowPageNum);
+		int pageNum = Integer.parseInt(nowPageNum);
+		
+		// 해당 페이지의 첫 번째 게시글 순서
+		int startRowNum = (pageNum-1) * viewRows;
+		
+		// 전체 게시글 수
+		int totalBoardNum = projectService.totalMinutesNum(projectSeq);
+		
+		// 전체 페이지 수
+		int totalPageNum = 0;
+		if(totalBoardNum % viewRows == 0) {
+			totalPageNum = (int)Math.ceil(totalBoardNum/viewRows);
+		} else {
+			totalPageNum = (int)Math.ceil(totalBoardNum/viewRows) + 1;
+		}
+		
+		// 페이징 관련 정보 page에 저장
+		PageVO page = new PageVO();
+		
+		page.setPageNum(pageNum);
+		page.setStartRowNum(startRowNum);
+		page.setTotalBoardNum(totalBoardNum);
+		page.setTotalPageNum(totalPageNum);
+		
+		mav.addObject("page", page);
+		
+		int[] pageRange = new int[totalPageNum];
+		
+		for(int i=0; i>totalPageNum; i++) {
+			pageRange[i] = i + 1;
+		}
+		mav.addObject("pageRange", pageRange);
+		
+		// 페이징 적용된 리스트
+		ArrayList<MinutesVO> list = projectService.selectMinutes(projectSeq, startRowNum, viewRows);
+		
+		mav.addObject("list", list);
 		mav.setViewName(viewName);
 		return mav;
 	}

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.asc.dao.ProjectDAO;
 import com.project.asc.vo.MessageVO;
+import com.project.asc.vo.MinutesVO;
 import com.project.asc.vo.ProjectVO;
 import com.project.asc.vo.ScheduleVO;
 import com.project.asc.vo.TeamMemberVO;
@@ -21,6 +22,82 @@ public class ProjectService {
 	
 	@Autowired
 	private ProjectDAO projectDAO;
+	/* 회의록 검색 */
+	public ArrayList<MinutesVO> searchMinutes(MinutesVO minutes) {
+		// TODO Auto-generated method stub
+		ArrayList<MinutesVO> list = null;
+		
+		list = projectDAO.searchMinutes(minutes);
+		
+		return list;
+	}
+	
+	/* 검색된 회의록 수 (카운트) */
+	public int searchMinutesNum(MinutesVO minutes) {
+		
+		int searchMinutesNum = 0;
+		
+		searchMinutesNum = projectDAO.searchMinutesNum(minutes);
+	
+		return searchMinutesNum;
+	}
+	
+	/* 회의록 수정 */
+	public boolean updateMinutes(MinutesVO minutes) {
+		// TODO Auto-generated method stub
+		boolean flag = false;
+		
+		flag = projectDAO.updateMinutes(minutes);
+		
+		return flag;
+	}
+	
+	/* 회의록 상세 보기 */
+	public MinutesVO readMinutes(int minutesSeq) {
+		// TODO Auto-generated method stub
+		MinutesVO minutes = null;
+		
+		minutes = projectDAO.readMinutes(minutesSeq);
+		
+		return minutes;
+	}
+	
+	/* 회의록 작성 */
+	public boolean insertMinutes(MinutesVO minutes) {
+		// TODO Auto-generated method stub
+		boolean flag = false;
+		
+		flag = projectDAO.insertMinutes(minutes);
+		
+		return false;
+	}
+	
+	/* 회의록 참여 인원 중 팀원들 체크박스 */
+	public ArrayList<TeamMemberVO> selectTeamMemberCheckbox(String teamId) {
+		ArrayList<TeamMemberVO> list = null;
+		
+		list = projectDAO.selectTeamMemberCheckbox(teamId);
+		
+		return list;
+	}
+	
+	/* 회의록 목록 + 페이징 */
+	public ArrayList<MinutesVO> selectMinutes(int projectSeq, int startRowNum, int viewRows) {
+		// TODO Auto-generated method stub
+		ArrayList<MinutesVO> list = null;
+		
+		list = projectDAO.selectMinutes(projectSeq, startRowNum, viewRows);
+		
+		return list;
+	}
+	
+	/* 전체 회의록 수 (카운트) */
+	public int totalMinutesNum(int projectSeq) {
+		
+		int totalMinutesNum = projectDAO.totalMinutesNum(projectSeq);
+	
+		return totalMinutesNum;
+	}
 	
 	/* 프로젝트 프로세스 완성 */
 	public boolean projectComplete(int projectSeq) {

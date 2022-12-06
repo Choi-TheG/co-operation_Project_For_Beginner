@@ -77,6 +77,7 @@ th{
 	border-bottom: 1px solid #c2c2c2;
 	font-size: 20px;
 }
+tr{font-size: 20px;border:0px;border-bottom:1px solid #000;}
 tr:hover{ background-color:#f5f5f5; }
 input[type=text]{
 	border: 0px;
@@ -113,6 +114,7 @@ button, input[type=button]{
 	width: 100%;
 	margin: 0px;
 	height: 25px;
+	margin-bottom: 10px;
 	border: 1px solid #c2c2c2;
 	border-radius: 5px;
 	background-color: #fff;
@@ -134,7 +136,7 @@ button, input[type=button]{
 		<li class="li2"><a href="../documents/manageDocuments">문서 관리</a></li>
 		<li><a href="../function/manageFunction">기능</a></li>
 		<li><a href="../wbs/manageWbs">일정</a></li>
-		<li><a href="../implementation/viewImplementation">구현</a></li>
+		<li><a href="../implementation/viewImplementation?projectSeq=${project.projectSeq }&pageNum=1">구현</a></li>
 		<li><a href="../test/manageTest">테스트</a></li>
 		<li><a href="../project/viewComplete">완성</a></li>
 	</ul>
@@ -147,14 +149,28 @@ button, input[type=button]{
 </div>
 <form action="uploadFile" method="POST" enctype="multipart/form-data">
 <table id="documentsTable">
-	<tr><th width="30%">문서명</th><th width="35%">파일</th><th width="15%">업로드일자</th><th width="10%">작성자</th><th style="width:8%;border-bottom:none;background-color:none;">수정</th></tr>
+	<tr>
+		<th width="30%">문서명</th>
+		<th width="35%">파일</th>
+		<th width="15%">업로드일자</th>
+		<th width="10%">작성자</th>
+		<th style="width:8%;border-bottom:none;background-color:none;">수정</th>
+	</tr>
 	<c:forEach var="documents" items="${list}" varStatus="index">
-		<tr><td hidden="hidden"><input type="text" value="${documents.documentsSeq}" name="documentsSeq"></td><td hidden="hidden"></td></tr>
 		<tr>
-			<td>
+			<td hidden="hidden">
+				<input type="text" value="${documents.documentsSeq}" name="documentsSeq">
+			</td>
+			<td hidden="hidden">
+				<input type="hidden" value="${documents.projectSeq}">
+			</td>
+		</tr>
+		<tr>
+			<td id="viewUpdatePage${index.count}">
 				<a onclick="updateBtn(${documents.documentsSeq});">
 				${documents.documentsName}
-				<input type="hidden" value="${documents.documentsName}" name="documentsName" class="documentsName" id="documentsName${documents.documentsSeq}" placeholder="문서명" readonly="readonly">
+				<input type="hidden" value="${documents.documentsName}" name="documentsName" class="documentsName" 
+				id="documentsName${documents.documentsSeq}" placeholder="문서명" readonly="readonly">
 				</a>
 			</td>
 			<td>
@@ -168,6 +184,9 @@ button, input[type=button]{
 							<input type="hidden" value="${documents.realFileName}" id="download${documents.documentsSeq}" style="width:100%;" disabled="disabled">
 						</a>
 					</c:when>
+					<c:otherwise>
+						
+					</c:otherwise>
 				</c:choose>
 				</div>
 			</td>
@@ -181,7 +200,6 @@ button, input[type=button]{
 			</td>
 			<td>
 				<input type="button" onclick="updateBtn(${documents.documentsSeq});" value="수정" style="width:90%;margin-bottom:3px;">
-				<%-- <input type="button" id="updateBtn${documents.documentsSeq}" value="수정" style="width:90%;margin-bottom:3px;"> --%>
 				<br/>
 				<input type="button" value="삭제" onclick="deleteBtn(${documents.documentsSeq});" style="width:90%;">
 			</td>
@@ -220,8 +238,8 @@ $(document).ready(function() {
 function updateBtn(seq){
 	window.screen.width // 좌우화면 크기
 	window.screen.height // 상하화면 크기
-	let popupWidth = 600;
-	let popupHeight = 500;
+	let popupWidth = 360;
+	let popupHeight = 300;
 	let popupX = (window.screen.width /2) - (popupWidth /2); // 팝업창 가로크기(X축) 1/2
 	let popupY = (window.screen.height /2) - (popupHeight /2); // 팝업창 세로크기(Y축) 1/2
 	window.open("./viewUpdateDocument?documentsSeq="+seq,"문서 수정","width="+popupWidth+", height="+popupHeight+", top="+popupY+", left="+popupX+", directories=0, location=0, menubar=0, toolbar=0, scrollbars=0, status=1");
