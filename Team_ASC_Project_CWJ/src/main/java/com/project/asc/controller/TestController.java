@@ -47,39 +47,17 @@ public class TestController {
 		TestVO vo = new TestVO();
 		vo.setManager(loginUser);
 		
-		String selectedUser = (String) request.getAttribute("selectedUser");
-		System.out.println("selected : "+selectedUser);
-		
 		// list
 		ArrayList<TeamMemberVO> userList = new ArrayList<TeamMemberVO>();
 		ArrayList<TestVO> list = new ArrayList<TestVO>();
 		userList = testService.selectUserList(teamId);
 		list = testService.selectAllTest(projectSeq);
-		
+		System.out.println("Test list : "+list);
 		mav.addObject("loginUser", loginUser);
 		mav.addObject("userList", userList);
 		mav.addObject("list", list);
 		
 		mav.setViewName("/test/manageTest");
-		return mav;
-	}
-	
-	/* 유저별 리스트 */
-	@RequestMapping(value = "/listByUser", method = RequestMethod.GET)
-	public ModelAndView listByUser(@RequestParam("manager") String manager,
-			HttpServletRequest request, HttpServletResponse response) {
-		System.out.println("list manager : "+manager);
-		ModelAndView mav = new ModelAndView();
-		// get projectSeq
-		ProjectVO project = (ProjectVO) request.getSession().getAttribute("project");
-		int projectSeq = project.getProjectSeq();
-
-		ArrayList<TestVO> list = new ArrayList<TestVO>();
-		
-		list = testService.selectListByUser(projectSeq, manager);
-		
-		mav.addObject("listByUser",list);
-		mav.setViewName("/test/listByUser");
 		return mav;
 	}
 	
@@ -106,31 +84,7 @@ public class TestController {
 		return mav;
 	}
 	
-	/* 제목행 수정 */
-	@RequestMapping(value="updateHeadTest", method=RequestMethod.GET)
-	public ModelAndView updateHeadTest(@ModelAttribute("info") TestVO test,
-			HttpServletRequest request, HttpServletResponse response) {
-//		System.out.println("controllerVO : "+test);
-		ModelAndView mav = new ModelAndView();
-		boolean flag = false;
-		
-		// get userName in session
-		UserVO member = (UserVO) request.getSession().getAttribute("member");
-		String user = member.getName();
-		
-		flag = testService.updateHeadTest(test);
-		if(flag) {
-			System.out.println("test head update done");
-		} else {
-			System.out.println("test head update fail");
-		}
-		
-		test.setManager(user);
-		mav.setViewName("redirect:/test/manageTest");
-		return mav;
-	}
-	
-	/* 테이블 행 수정 */
+	/* 행 수정 */
 	@RequestMapping(value="updateTest", method=RequestMethod.GET)
 	public ModelAndView updateTest(@ModelAttribute("info") TestVO test,
 			@RequestParam("testSeq") String testSeq,

@@ -158,13 +158,13 @@ input:not(:placeholder-shown){border-bottom: 1px solid #8aa1a1;}
 	margin-top: 20px;
 	margin-left: 5px;
 }
-#link:hover, #link:focus { 
+#link:hover, #link:focus {
 	font-weight: bold;
 	animation-duration: 1s;
 	animation-name: rainbowLink; 
 	animation-iteration-count: infinite; 
-} 
-@keyframes rainbowLink {     
+}
+@keyframes rainbowLink {
 	0% { color: #ff2a2a; }
 	15% { color: #ff7a2a; }
 	30% { color: #ffc52a; }
@@ -221,7 +221,7 @@ input:not(:placeholder-shown){border-bottom: 1px solid #8aa1a1;}
 $(document).ready(function(){
 	console.log('ready');
 	
-	/* let drop = document.querySelector(".dropBox");
+	let drop = document.querySelector(".dropBox");
 	let text = document.querySelector(".dropBox h3");
 	
 	drop.addEventListener("drop", (e) => {
@@ -249,7 +249,7 @@ $(document).ready(function(){
 		
 		drop.classList.remove("active");
 	});
-	 */
+
 }); // document end
 
 function updateCell(){

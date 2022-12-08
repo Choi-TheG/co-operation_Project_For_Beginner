@@ -78,7 +78,7 @@ th{
 	font-size: 20px;
 }
 tr{font-size: 20px;border:0px;border-bottom:1px solid #000;}
-tr:hover{ background-color:#f5f5f5; }
+tr:hover{ background-color:#f5f5f5; font-weight:bold;}
 input[type=text]{
 	border: 0px;
 	width: 98%;
@@ -238,11 +238,13 @@ $(document).ready(function() {
 function updateBtn(seq){
 	window.screen.width // 좌우화면 크기
 	window.screen.height // 상하화면 크기
-	let popupWidth = 360;
+	let popupWidth = 350;
 	let popupHeight = 300;
 	let popupX = (window.screen.width /2) - (popupWidth /2); // 팝업창 가로크기(X축) 1/2
 	let popupY = (window.screen.height /2) - (popupHeight /2); // 팝업창 세로크기(Y축) 1/2
-	window.open("./viewUpdateDocument?documentsSeq="+seq,"문서 수정","width="+popupWidth+", height="+popupHeight+", top="+popupY+", left="+popupX+", directories=0, location=0, menubar=0, toolbar=0, scrollbars=0, status=1");
+	window.open("./viewUpdateDocument?documentsSeq="+seq,"문서 수정",
+			"width="+popupWidth+", height="+popupHeight+", top="+popupY+", left="
+			+popupX+", directories=0, location=0, menubar=0, toolbar=0, scrollbars=0, status=1");
 	/* window.opener="nothing";
 	window.open('','_parent','');
 	window.close(); */

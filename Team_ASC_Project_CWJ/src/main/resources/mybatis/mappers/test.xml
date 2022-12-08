@@ -25,11 +25,12 @@
 		]]>
 	</select>
 	
-	<select id="testListByUser" parameterType="testVO" resultMap="testMap">
+	<!-- 유저별 단위테스트 목록출력  -->
+	<select id="selectTestByUser" parameterType="testVO" resultMap="testMap" resultType="testVO">
 		<![CDATA[
 			select * from test
 			where project_seq = #{projectSeq} and manager = #{manager}
-			order by scenario_no;
+			order by scenario_no, insert_time;
 		]]>
 	</select>
 	

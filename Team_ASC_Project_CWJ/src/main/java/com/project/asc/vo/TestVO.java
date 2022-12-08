@@ -5,7 +5,7 @@ public class TestVO {
 	private int projectSeq;
 	private String customer;
 	private String manager;
-	private int scenarioNo;
+	private String scenarioNo;
 	private String scenarioData;
 	private String expected;
 	private String result;
@@ -16,7 +16,7 @@ public class TestVO {
 		super();
 	}
 	
-	public TestVO(int testSeq, int projectSeq, String customer, String manager, int scenarioNo,
+	public TestVO(int testSeq, int projectSeq, String customer, String manager, String scenarioNo,
 			String scenarioData, String expected, String result, String remark) {
 		super();
 		this.testSeq = testSeq;
@@ -71,11 +71,11 @@ public class TestVO {
 		this.manager = manager;
 	}
 	
-	public int getScenarioNo() {
+	public String getScenarioNo() {
 		return scenarioNo;
 	}
 	
-	public void setScenarioNo(int scenarioNo) {
+	public void setScenarioNo(String scenarioNo) {
 		this.scenarioNo = scenarioNo;
 	}
 	

@@ -63,15 +63,13 @@
 /* UnitTest */
 /* //////////////////////////////////////////////// */
 #content{margin-bottom: 8px}
-
 input[type=text]{
 	border: 0px;
 	width: 90%;
 	height: 26px;
-	font-size: 20px;
+	font-size: 18px;
 	display: center;
 }
-
 button, input[type=button]{
 	color: white;
     background-color: #384D59;
@@ -83,9 +81,7 @@ button, input[type=button]{
     margin-left: 3px;
     text-align: center;
 }
-
 textarea{ font-size: 20px; }
-
 select{ float: right; }
 
 /* DivTable */
@@ -100,9 +96,7 @@ select{ float: right; }
 .divTable, .divTableCell, .divTableHead{ border: 1px solid #c5c5c5; }
 
 .divTableHead{ font-size: 20px; }
-
 .divTableRow:hover{}
-
 .numText{
 	border: 0px;
 	width: 50px;
@@ -110,21 +104,15 @@ select{ float: right; }
 	font-size: 20px;
 	display: center;
 }
-
 .updelBtn{
 	width:96%;
 	margin-top:3px;
 	margin-left:2px;
 }
-
 .textArea{ resize: none; border: 0px; }
-
 .hidden{ display: none; }
-
-.red{ color: red; font-weight: bold; text-decoration: underline }
-
+.red{ color: red; font-weight: bold; text-decoration: underline;border: 1px solid red; opacity: 80% }
 .bodyTitle{ font-weight: bold;text-align: center; font-size: 20px }
-
 #selectUser{
 	width:65%;
 	height:28px;
@@ -132,9 +120,7 @@ select{ float: right; }
 	margin-right:3%;
 	margin-top:3px
 }
-
 #fullHD{ width:130px; }
-
 #createBtn{
 	width: 96%;
 	margin: 0px;
@@ -146,7 +132,6 @@ select{ float: right; }
 	text-align: center;
 	font-size: 14px;
 }
-
 #createBtn:hover{
 	border-radius: 5px;
 	background-color: #f5f5f5;
@@ -166,78 +151,26 @@ select{ float: right; }
 	</ul>
 </nav>
 <form action="#" method="GET" id="testForm">
-	<div style="font-size:1em;"><h1>단위 테스트<input type="button" value="전체화면으로 보기" onclick="wide()" id="fullHD"></h1></div>
+	<div style="font-size:1em;"><h1>단위 테스트</h1></div>
 	<div class="divTable unstyledTable">
-		<!-- 머리 -->
-		<div class="divTableHeading">
-			<!-- 수정버튼 누르기 전 -->
-			<c:forEach var="test" items="${list}" begin="0" end="0">
-				<div id="textHead${test.testSeq}" class="head divTableRow">
-					<div class="divTableHead" style="width:5%;">
-						<input type="hidden" id="only">
-					</div>
-					<div class="divTableHead" style="font-weight: bold;text-align: right;">
-						<!-- 사용자 -->
-					</div>
-					<div class="divTableHead" style="text-align: right">
-						<%-- ${test.customer} --%>
-					</div>
-					<div class="divTableHead" style="font-weight: bold;text-align: right;">
-						담당자
-					</div>
-					<div class="divTableHead">
-						<!-- 수정 페이지 버튼 -->
-						<%-- <input type="button" onclick="viewUpdateHeadBtn(${test.testSeq})" class="hidden" id="updtBtn" value="수정"> --%>
-						<select id="selectUser" name="selectUser">
-							<option value="0">전체</option>
-							<c:forEach var="userList" items="${userList}" varStatus="optionCount">
-								<option value="${userList.userName}">${userList.userName}</option>
-							</c:forEach>
-						</select>
-						<input type="hidden" id="loginUser" value="${loginUser}">
-					</div>
-				</div>
-				<!-- 수정버튼 누른 후 -->
-				<div id="updateHead${test.testSeq}" class="divTableRow hidden">
-					<div class="divTableHead" style="width:5%;">
-						
-					</div>
-					<div class="divTableHead" style="font-weight: bold;text-align: right;">
-						<!-- 사용자 -->
-					</div>
-					<div class="divTableHead" style="text-align: right">
-						<%-- <input type="text" value="${test.customer}" name="customer" id="customer"> --%>
-					</div>
-					<div class="divTableHead" style="font-weight: bold;text-align: right;">
-						담당자
-					</div>
-					<div class="divTableHead" style="float:right;margin-bottom:0px">
-						<input type="text" value="${loginUser}" name="maneger">
-						<!-- 수정, 뒤로가기 버튼 -->
-						<%-- <input type="button" onclick="historyBack()" value="뒤로가기">
-						<input type="button" onclick="updateHeadBtn(${test.testSeq})" value="수정"> --%>
-					</div>
-				</div>
-	
-			</c:forEach>
-		</div>
-		<!-- 몸통 -->
 		<div class="divTableBody">
-			<div class="divTableRow">
-				<div class="divTableCell" style="width:5%;">No</div>
-				<div class="divTableCell" style="width:25%">테스트 시나리오 / 테스트 데이터</div>
+			<div class="divTableRow" style="text-align:center;font-weight:bold;font-size:22px;">
+				<div class="divTableCell" style="width:15%;">담당자</div>
+				<div class="divTableCell" style="width:10%;">No.</div>
+				<div class="divTableCell" style="width:25%;font-size:20px">테스트 시나리오 / 테스트 데이터</div>
 				<div class="divTableCell" style="width:25%">예상 결과</div>
 				<div class="divTableCell" style="width:10%">실제 결과</div>
 				<div class="divTableCell" style="width:15%">비고</div>
+				<input type="hidden" value="${loginUser}" id="loginUser">
 			</div>
 			<!-- 수정버튼 누르기 전 -->
 			<c:forEach var="test" items="${list}" varStatus="rowCount">
-				<div id="text${test.testSeq}" class="divTableRow textHover ${test.manager}">
+				<div id="text${rowCount.count}" class="divTableRow textHover ${test.manager}">
 					<div class="divTableCell">
-						<c:if test="${test.scenarioNo eq 1}">
-							<label for="scenario${rowCount.count}">${test.manager}</label>
-						</c:if>
-						<input type="text" value="${test.scenarioNo}" style="margin-top: 0px;text-align:center" class="scenarioNo" id="scenarioNo${rowCount.count}">
+						<input type="text" value="${test.manager}" style="margin-top:0px;text-align:center;" class="manager" id="manager${rowCount.count}">
+					</div>
+					<div class="divTableCell">
+						<input type="text" value="${test.scenarioNo}" style="margin-top: 0px;text-align:center" class="scenarioNo">
 					</div>
 					<div class="divTableCell">
 						<textarea rows="10" cols="30" class="textArea" readonly="readonly">${test.scenarioData}</textarea>
@@ -259,7 +192,10 @@ select{ float: right; }
 				<!-- 수정버튼 누른 후 -->
 				<div id="update${test.testSeq}" class="divTableRow hidden">
 					<div class="divTableCell">
-						<input type="text" value="${test.scenarioNo}" onKeyUp="this.value=this.value.replace(/[^-0-9]/g,'');" style="border: 1px solid;radius: 5px;margin-top: 0px" name="scenarioNo" id="scenarioNo${test.testSeq}">
+						<input type="text" value="${test.manager}" name="manager" id="manager${test.testSeq}" readonly="readonly">
+					</div>
+					<div class="divTableCell">
+						<input type="text" value="${test.scenarioNo}" onkeypress='return checkNo(event)' style="border: 1px solid;radius: 5px;margin-top: 0px" name="scenarioNo" id="scenarioNo${test.testSeq}" class="scenarioNum" placeholder="0 or 0-0">
 					</div>
 					<div class="divTableCell">
 						<textarea rows="10" cols="30" name="scenarioData" id="scenarioData${test.testSeq}">${test.scenarioData}</textarea>
@@ -281,20 +217,36 @@ select{ float: right; }
 			</c:forEach>
 		</div>
 	</div>
-	<input type="button" onclick="location.href='createTest.do'" value="+ 추가" id="createBtn" class="hidden">
+	<input type="button" onclick="location.href='createTest.do'" value="+ 추가" id="createBtn">
 </form>
 <script>
 $(document).ready(function(){
 	console.log("ready");
-// 첫 화면에는 무료로 행 추가 버튼 증정 이벤트	
-	let createBtn = document.getElementById("createBtn");
-
-	if(document.getElementById("only") == null){
-		createBtn.classList.remove("hidden");
-	} else{
-		createBtn.classList.add("hidden");
+	
+	let hover = document.querySelectorAll(".textHover");
+	let btnDiv = document.querySelectorAll(".btnDiv");
+	let tr_count = $('.btnDiv').length;
+	let user = document.getElementById("loginUser").value;
+	let manage = document.querySelectorAll(".manager");
+	
+	for(let i=1;i<tr_count+1;i++){
+		let manager = manage[i-1].value;
+		
+		$('#text'+i).on("mouseover", function(){
+			if(manager != user){
+				btnDiv[i-1].classList.add("hidden");
+			} else{
+				btnDiv[i-1].classList.remove("hidden");
+			}
+			
+		});
+		$('#text'+i).on("mouseout", function(){
+			btnDiv[i-1].classList.add("hidden");
+		});
 	}
-// 시나리오 번호 고치지않은 번호 빨강처리	
+	
+	
+// 시나리오 번호 고치지않은 번호 빨강처리
 	let scenarioNo = document.querySelectorAll(".scenarioNo");
 	let sceNo_count = scenarioNo.length;
 
@@ -304,108 +256,45 @@ $(document).ready(function(){
 		}
 	}
 	
-// select 가 onchange되면 선택한 text와 같은 친구들 list 출력(혹은 같지않은 친구들 hidden)
-	$('#selectUser').on('change', function(){
-		let btnDiv = document.querySelectorAll(".btnDiv");					// class="btnDev"인 객체 모두를 선택
-		let upBtn = document.querySelector('#updtBtn');						// 수정 버튼
-		let addBtn = document.querySelector('#createBtn');					// 행 생성 버튼
-		let user = document.getElementById("loginUser").value;				// 로그인유저
-		let selected = document.getElementById("selectUser");				// selectbox에서 선택된 사람
-		let hover = document.querySelectorAll(".textHover");				// 테이블 행
-		let tr_count = $('.btnDiv').length;									// 버튼 division 수
-		let selectText = selected.options[selected.selectedIndex].text;		// text 추출
-		let selectValue = selected.options[selected.selectedIndex].value;	// value 추출
-		let man = document.querySelectorAll("."+selectText);				// userList class
+	var replaceChar = /[~!@\#$%^&*\()\=+_'\;<>\/.\`:\"\\,\[\]?|{}]/gi;
+	var replaceNotFullKorean = /[ㄱ-ㅎㅏ-ㅣ]/gi;
 
-		console.log("selec : "+selected);
-		console.log("selectText : "+ selectText);
-		console.log("selectValue : "+num);
-		
-		// 본인일 떄
-		if(selectText == user){
-			// tr 행 수만큼 반복
-			for(let i=0;i<tr_count;i++){
-			// 마우스 오버
-				// i번째 selector에 마우스 올라올 시 up, del 버튼 hidden 클래스 제거
-				hover[i].addEventListener("mouseover", function(){
-					btnDiv[i].classList.remove("hidden");
-				});
-				// i번째 selector에 마우스 나갈 시 up, del 버튼 hidden 클래스 생성
-				hover[i].addEventListener("mouseout", function(){
-					btnDiv[i].classList.add("hidden");
-				});
-			}
-			// 머릿글 수정 / 추가 버튼 출력
-			// upBtn.classList.remove("hidden");
-			addBtn.classList.remove("hidden");
-		// 전체를 눌렀을 때
-		} else if(selectValue == 0){
-			// 전체 목록 출력(페이지 새로고침)
-			location.reload();
-		// 본인이 아닐 때
-		} else{
-			// 수정, 삭제 버튼 숨기기
-			for(let i=0;i<tr_count;i++){
-				// loginUser != selector인 hover hidden
-				hover[i].classList.add("hidden");
-				
-				// 마우스 오버
-				hover[i].addEventListener("mouseover", function(){
-					btnDiv[i].classList.add("hidden");
-				});
-			}
-			// 수정 / 추가 버튼 숨기기
-			/* upBtn.classList.add("hidden"); */
-			addBtn.classList.add("hidden");
-		}
-		
-		// selectText와 같은 manager 행만 출력
-		for(let i=0;i<tr_count;i++){
-			let flag = hover[i].classList.contains(selectText);
-			console.log(flag);
-			if(!flag){
-				hover[i].classList.add("hidden");
-			} else{
-				hover[i].classList.remove("hidden");
-			}
-		}
-		
-		$.ajax({
-			type: "get",
-			url: "updateTest",
-			dataType: "text",
-			data: {testSeq:testSeq, scenarioNo:scenarioNo, scenarioData:scenarioData,
-				expected:expected, result:result, remark:remark},
-			success: function(data){
-				location.reload();
-				
-			}, error: function(data){
-				alert('fail');
-			}
-		});
-	});
-	
+    $(".scenarioNum").on("focusout", function() {
+        var x = $(this).val();
+        if (x.length > 0) {
+            if (x.match(replaceChar) || x.match(replaceNotFullKorean)) {
+                x = x.replace(replaceChar, "").replace(replaceNotFullKorean, "");
+            }
+            $(this).val(x);
+        }
+        }).on("keyup", function() {
+            $(this).val($(this).val().replace(replaceChar, ""));
+   });
+
 }); // document.ready end
-
-/* 사용자 수정 추가 */
 
 /* 행 수정 페이지 */
 function viewUpdateBtn(seq,count){
 	console.log(seq,count);
 	
 	document.getElementById("update"+seq).classList.remove("hidden");
-	document.getElementById("text"+seq).classList.add("hidden");
+	document.getElementById("text"+count).classList.add("hidden");
 }
+
+
 
 /* 행 수정 */
 function updateBtn(testSeq){
 	let textRow = document.getElementById("text"+testSeq);
 	let updtRow = document.getElementById("update"+testSeq);
+	let manager = document.getElementById("manager"+testSeq).value;
 	let scenarioNo = document.getElementById("scenarioNo"+testSeq).value;
 	let scenarioData = document.getElementById("scenarioData"+testSeq).value;
 	let expected = document.getElementById("expected"+testSeq).value;
 	let result = document.getElementById("result"+testSeq).value;
 	let remark = document.getElementById("remark"+testSeq).value;
+	/* console.log(testSeq+" + "+manager+" + "+scenarioNo+" + "+scenarioData+" + "
+			+expected+" + "+result+" + "+remark); */
 	
 	$.ajax({
 		type: "get",
